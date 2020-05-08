@@ -25,8 +25,8 @@ typedef struct {
 		bool (*PushArray) ( mem_pointer entity_data, int32_t array[], uint32_t size, native_pointer stack_mem);
 		bool (*PushString) ( mem_pointer entity_data, std::string str, native_pointer stack_mem);
 		bool (*Push) ( mem_pointer entity_data, int32_t value);
-	#if PLATFORMBITS == 64
-		bool (*PushArrayNative) ( mem_pointer entity_data, native_type array[], uint32_t size, native_pointer stack_mem);
+	#if PLATFORM_BITS == 64
+		bool (*PushArrayNative) ( mem_pointer entity_data, int64_t array[], uint32_t size, native_pointer stack_mem);
 	#else
 		bool (*PushArrayNative) ( mem_pointer entity_data, int32_t array[], uint32_t size, native_pointer stack_mem);
 	#endif
@@ -54,7 +54,7 @@ class EntitySystem
 		std::string GetMainScriptFile()
 		{
 			std::string file;
-			#if PLATFORMBITS == 64
+			#if PLATFORM_BITS == 64
 			file = "./c/scripts/main.amx64";
 			#else
 			file = "./c/scripts/main.amx";

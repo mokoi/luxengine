@@ -22,7 +22,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "elix/elix_string.hpp"
 #include "elix/elix_program.hpp"
 
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 	#ifndef _WIN32_IE
 		#define _WIN32_IE 0x0600
 	#endif
@@ -45,7 +45,7 @@ namespace elix {
 			int lastslash = path.find_last_of( ELIX_DIR_SEPARATOR, path.length() );
 			if ( lastslash == -1 )
 			{
-				return "."ELIX_DIR_SSEPARATOR;
+				return "." ELIX_DIR_SSEPARATOR;
 			}
 			if ( trailing )
 			{
@@ -109,7 +109,7 @@ namespace elix {
 		{
 			if ( !Exist(path) )
 			{
-			#ifdef __GNUWIN32__
+			#ifdef PLATFORM_WINDOWS
 				_mkdir( path.c_str() );
 			#else
 				mkdir( path.c_str(), 0744 );

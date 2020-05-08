@@ -51,8 +51,8 @@ protected:
 
 public:
 	virtual void SystemMessage(uint8_t type, std::string message) = 0;
-	virtual std::ostream& SystemMessage(const char *file, int line, uint8_t type ) = 0;
-	virtual std::ostream& SystemMessage(uint8_t type) = 0;
+	virtual std::ostream& SystemStreamMessage(const char *file, int line, uint8_t type ) = 0;
+	virtual std::ostream& SystemStreamMessage(uint8_t type) = 0;
 	virtual void AbleOutput(bool able) = 0;
 	virtual uint32_t WasInit(uint32_t flag) = 0;
 	virtual void QuitSubSystem(uint32_t flag) = 0;

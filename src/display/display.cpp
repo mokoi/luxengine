@@ -22,7 +22,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 extern GraphicSystem GraphicsNone;
 extern GraphicSystem GraphicsNative;
-#ifdef OPENGLENABLED
+#ifdef DISPLAYMODE_OPENGL
 extern GraphicSystem GraphicsOpenGL;
 #endif
 
@@ -54,7 +54,7 @@ DisplaySystem::DisplaySystem()
 
 	if ( !is_display_setup )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Graphic System Failed" << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Graphic System Failed" << std::endl;
 		return;
 	}
 
@@ -98,7 +98,7 @@ DisplaySystem::DisplaySystem( uint16_t width, uint16_t height  )
 
 	if ( !is_display_setup )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Graphic System Failed" << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Graphic System Failed" << std::endl;
 		return;
 	}
 
@@ -481,7 +481,7 @@ void DisplaySystem::UnrefSheet(std::string name)
 
 	if ( iter_sheet == this->_sheets.end() )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "RefSheet Failed: " << name << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "RefSheet Failed: " << name << std::endl;
 		return;
 	}
 
@@ -845,7 +845,7 @@ bool DisplaySystem::AddObjectToLayer(uint32_t layer, MapObject * new_object, boo
 	}
 	else
 	{
-		lux::core->SystemMessage( SYSTEM_MESSAGE_VISUAL_WARNING ) << "Failed to Add '" << new_object->TypeName().c_str() << "' to layer " << layer << std::endl;
+		lux::core->SystemStreamMessage( SYSTEM_MESSAGE_VISUAL_WARNING ) << "Failed to Add '" << new_object->TypeName().c_str() << "' to layer " << layer << std::endl;
 	}
 	return false;
 }

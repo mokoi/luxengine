@@ -464,7 +464,7 @@ void MapObject::SetSprite(LuxSprite * data)
 	}
 	else
 	{
-		lux::core->SystemMessage( SYSTEM_MESSAGE_VISUAL_WARNING ) << "Sprite missing: " << this->sprite.c_str() << std::endl;
+		lux::core->SystemStreamMessage( SYSTEM_MESSAGE_VISUAL_WARNING ) << "Sprite missing: " << this->sprite.c_str() << std::endl;
 	}
 }
 
@@ -488,7 +488,7 @@ LuxSprite * MapObject::GetSprite( bool no_increment )
 		}
 		else
 		{
-			lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR) << "data type error" << std::endl;
+			lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR) << "data type error" << std::endl;
 		}
 	}
 	return NULL;
@@ -544,7 +544,7 @@ LuxSprite * MapObject::GetCurrentSprite( )
 		}
 		else
 		{
-			lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR) << "data type error" << std::endl;
+			lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR) << "data type error" << std::endl;
 		}
 	}
 	return NULL;

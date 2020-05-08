@@ -18,7 +18,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 	#define _WIN32_IE 0x0400
 	#include <io.h>
 	#include <shlobj.h>

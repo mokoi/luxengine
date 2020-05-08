@@ -78,7 +78,7 @@ bool CoreSystem::InitSubSystem(uint32_t flag)
 	return true;
 }
 
-std::ostream& CoreSystem::SystemMessage(const char *file, int line, uint8_t type  )
+std::ostream& CoreSystem::SystemStreamMessage(const char *file, int line, uint8_t type  )
 {
 	switch ( type )
 	{
@@ -115,14 +115,14 @@ std::ostream& CoreSystem::SystemMessage(const char *file, int line, uint8_t type
 		}
 	}
 }
-std::ostream& CoreSystem::SystemMessage( uint8_t type )
+std::ostream& CoreSystem::SystemStreamMessage( uint8_t type )
 {
-	return this->SystemMessage( NULL, 0, type );
+	return this->SystemStreamMessage( NULL, 0, type );
 }
 
 void CoreSystem::SystemMessage( uint8_t type, std::string message )
 {
-	this->SystemMessage( NULL, 0, type ) << message << std::endl;
+	this->SystemStreamMessage( NULL, 0, type ) << message << std::endl;
 }
 
 bool CoreSystem::Good()

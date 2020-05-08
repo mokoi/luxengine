@@ -152,7 +152,7 @@ bool Player::SetupController( std::string name )
 		}
 		else
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "'" << name << "'' Invalid Control String" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "'" << name << "'' Invalid Control String" << std::endl;
 		}
 		values.clear();
 	}
@@ -199,7 +199,7 @@ void Player::ParseButton(Player_Button * button, std::string config)
 	{
 		if ( config != "n" )
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_WARNING) << "Not a valid button '" << config << "'" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_WARNING) << "Not a valid button '" << config << "'" << std::endl;
 		}
 		return;
 	}
@@ -217,24 +217,24 @@ void Player::ParseButton(Player_Button * button, std::string config)
 		case 'k':
 			/* Todo: Handle more then one */
 			button->device = KEYBOARD;
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [KEYBOARD] #" << button->device_number << " - " << SDL_GetScancodeName((SDL_Scancode)button->sym) << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [KEYBOARD] #" << button->device_number << " - " << SDL_GetScancodeName((SDL_Scancode)button->sym) << std::endl;
 			break;
 		case 'm':
 			/* Todo: Handle more then one */
 			button->device = MOUSEBUTTON;
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [MOUSEBUTTON] #" << button->device_number << " - " << button->sym << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [MOUSEBUTTON] #" << button->device_number << " - " << button->sym << std::endl;
 			break;
 		case 'b':
 			button->device = CONTROLBUTTON;
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [CONTROLBUTTON] #" << button->device_number << " - " << button->sym << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [CONTROLBUTTON] #" << button->device_number << " - " << button->sym << std::endl;
 			break;
 		case 'h':
 			button->device = CONTROLHAT;
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [CONTROLHAT] #" << button->device_number << " - " << button->sym << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [CONTROLHAT] #" << button->device_number << " - " << button->sym << std::endl;
 			break;
 		case 't':
 			button->device = TOUCHSCREEN;
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [CONTROLHAT] #" << button->device_number << " - " << button->sym << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [CONTROLHAT] #" << button->device_number << " - " << button->sym << std::endl;
 			break;
 		case 'r':
 		case 'c':
@@ -242,12 +242,12 @@ void Player::ParseButton(Player_Button * button, std::string config)
 			button->sym = elix::string::Hash(dev_butt);
 			lux::core->VirtualGamepadAddItem( button->sym, VIRTUALBUTTON, dev_butt );
 
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [VIRTUALBUTTON] #" << button->device_number << " - " << button->sym << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [VIRTUALBUTTON] #" << button->device_number << " - " << button->sym << std::endl;
 			break;
 
 		default:
 			button->device = NOINPUT;
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [NOINPUT] " << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Player Button: [NOINPUT] " << std::endl;
 			break;
 	}
 

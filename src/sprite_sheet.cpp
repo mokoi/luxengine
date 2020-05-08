@@ -57,8 +57,8 @@ void Lux_Sprite_SetCollisions( LuxSprite * sprite, tinyxml2::XMLElement * elemen
 			{
 				sprite->collisions[collision_id].x = element->IntAttribute("x");
 				sprite->collisions[collision_id].y = element->IntAttribute("y");
-				sprite->collisions[collision_id].w = element->IntAttribute("w");
-				sprite->collisions[collision_id].h = element->IntAttribute("h");
+				sprite->collisions[collision_id].w = static_cast<uint16_t>(element->IntAttribute("w"));
+				sprite->collisions[collision_id].h = static_cast<uint16_t>(element->IntAttribute("h"));
 				sprite->has_collision_areas = true;
 			}
 		}
@@ -115,7 +115,7 @@ LuxSheet::~LuxSheet()
 	for( std::map<uint32_t, LuxSprite *>::iterator iter = this->children.begin(); iter != this->children.end(); ++iter )
 	{
 		delete (*iter).second;
-		(*iter).second = NULL;
+		(*iter).second = nullptr;
 	}
 	this->children.clear();
 }
@@ -129,20 +129,20 @@ void LuxSheet::SetName( std::string name )
 bool LuxSheet::ParseXML()
 {
 	bool results = false;
-	tinyxml2::XMLDocument * xml_file = NULL;
-	tinyxml2::XMLElement * root, * sprite_element = NULL, * position_element = NULL, * collision_element = NULL, * border_element = NULL, * frame_element = NULL;
+	tinyxml2::XMLDocument * xml_file = nullptr;
+	tinyxml2::XMLElement * root, * sprite_element = nullptr, * position_element = nullptr, * collision_element = nullptr, * border_element = nullptr, * frame_element = nullptr;
 
 	xml_file = MokoiGame_GetXML("./sprites/" + this->name + ".xml");
 	if ( xml_file->Error() )
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | " << xml_file->GetErrorStr1() << " : " << xml_file->GetErrorStr2 () << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | " << xml_file->GetErrorStr1() << " : " << xml_file->GetErrorStr2 () << std::endl;
 		goto function_exit;
 	}
 
 	root = xml_file->RootElement();
 	if ( !root || strcmp(root->Value(), "sheet") )
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | sprites/" + this->name + ".xml not a valid sheet file." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | sprites/" + this->name + ".xml not a valid sheet file." << std::endl;
 		goto function_exit;
 	}
 
@@ -186,7 +186,7 @@ bool LuxSheet::ParseXML()
 			Lux_Sprite_SetCollisions( t_sprite, collision_element );
 			Lux_Sprite_SetBorderImages( t_sprite, border_element );
 
-			this->children.insert( std::make_pair<uint32_t, LuxSprite*>( t_sprite->hash, t_sprite ) );
+			this->children.insert( { t_sprite->hash, t_sprite } );
 		}
 	}
 
@@ -252,7 +252,7 @@ bool LuxSheet::ParseXML()
 				}
 			}
 
-			this->children.insert( std::make_pair<uint32_t, LuxSprite*>( t_sprite->hash, t_sprite ) );
+			this->children.insert( { t_sprite->hash, t_sprite } );
 		}
 	}
 	/*
@@ -283,15 +283,15 @@ bool LuxSheet::ParseXML()
 
 void LuxSheet::Print()
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "----------------------------" << std::endl;
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "-" << this->name << std::endl;
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "----------------------------" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "----------------------------" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "-" << this->name << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "----------------------------" << std::endl;
 	for( std::map<uint32_t, LuxSprite *>::iterator iter = this->children.begin(); iter != this->children.end(); ++iter )
 	{
 		LuxSprite  * s = (*iter).second;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "(" << (*iter).first << ")" << s->name << " [" << s->sheet_area.x << "x" << s->sheet_area.y << "] w:"<< s->sheet_area.w << " h:" << s->sheet_area.h << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "(" << (*iter).first << ")" << s->name << " [" << s->sheet_area.x << "x" << s->sheet_area.y << "] w:"<< s->sheet_area.w << " h:" << s->sheet_area.h << std::endl;
 	}
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "----------------------------" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "----------------------------" << std::endl;
 }
 
 bool LuxSheet::ParseSimpleText(const std::string content )
@@ -316,8 +316,10 @@ bool LuxSheet::ParseSimpleText(const std::string content )
 	t_sprite->sheet_area.y = elix::string::ToInt32(info_array[2]);
 	t_sprite->sheet_area.w = elix::string::ToIntU16(info_array[3]);
 	t_sprite->sheet_area.h = elix::string::ToIntU16(info_array[4]);
-
-	this->children.insert( std::make_pair<uint32_t, LuxSprite*>( elix::string::Hash(info_array[0]), t_sprite ) );
+	t_sprite->hash = elix::string::Hash(info_array[0]);
+	this->children.insert(
+		{t_sprite->hash, t_sprite}
+	);
 
 	info_array.clear();
 
@@ -358,7 +360,7 @@ bool LuxSheet::Load()
 {
 	if ( !this->name.length() )
 	{
-		int q =0;
+		//int q =0;
 	}
 	if ( !this->loaded || !this->failed )
 	{
@@ -368,14 +370,14 @@ bool LuxSheet::Load()
 		}
 		if ( this->graphics.LoadSpriteSheet(this->name, &this->children) )
 		{
-			//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Loading Sheet '" << this->name << "'" << this->requested << std::endl;
+			//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Loading Sheet '" << this->name << "'" << this->requested << std::endl;
 			this->loaded = true;
 
 			this->failed = false;
 		}
 		else
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Failed loading Spritesheet '" << name << "'" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Failed loading Spritesheet '" << name << "'" << std::endl;
 			this->failed = true;
 		}
 	}
@@ -412,7 +414,7 @@ bool LuxSheet::Unload()
 	{
 		int q =0;
 	}
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Freeing sheet '" << this->name << "' (" << this->requested << ")" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Freeing sheet '" << this->name << "' (" << this->requested << ")" << std::endl;
 	this->graphics.FreeSpriteSheet( &this->children );
 	this->loaded = false;
 	this->requested = 0;
@@ -433,7 +435,7 @@ LuxSprite * LuxSheet::GetSprite( std::string name )
 		return (LuxSprite *)(iter->second);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 LuxSprite * LuxSheet::GetSprite( uint32_t name_hash )
@@ -448,5 +450,5 @@ LuxSprite * LuxSheet::GetSprite( uint32_t name_hash )
 		return (LuxSprite *)(iter->second);
 	}
 
-	return NULL;
+	return nullptr;
 }

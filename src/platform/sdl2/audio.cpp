@@ -48,7 +48,7 @@ AudioSystem::AudioSystem()
 		Mix_ReserveChannels(2); // Reserve channels for dialog
 
 		this->bits = this->outformat&0xFF;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Audio System: " << this->frequency << "Hz " << this->bits << " bit " << ( this->channels > 1 ? "stereo" : "mono" ) << " - Buffer Size: " << this->buffers << " bytes." << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Audio System: " << this->frequency << "Hz " << this->bits << " bit " << ( this->channels > 1 ? "stereo" : "mono" ) << " - Buffer Size: " << this->buffers << " bytes." << std::endl;
 
 
 		/* Preload Audio Files into memory */
@@ -238,7 +238,7 @@ int32_t AudioSystem::PlayEffect ( std::string requestSound, int32_t x, int32_t y
 
 		if ( chan == -1 )
 		{
-			lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayEffect: " << Mix_GetError() << std::endl;
+			lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayEffect: " << Mix_GetError() << std::endl;
 			return -1;
 		}
 		else
@@ -249,7 +249,7 @@ int32_t AudioSystem::PlayEffect ( std::string requestSound, int32_t x, int32_t y
 		}
 		return (int32_t)len;
 	}
-	lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << requestSound << " not found" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << requestSound << " not found" << std::endl;
 #endif
 	return 0;
 }
@@ -288,7 +288,7 @@ int32_t AudioSystem::PlayDialog( int32_t requestSound, int8_t channel )
 
 			if ( used_channel == -1 )
 			{
-				lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayEffect: " << Mix_GetError() << std::endl;
+				lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayEffect: " << Mix_GetError() << std::endl;
 				return -1;
 			}
 			else
@@ -330,7 +330,7 @@ int32_t AudioSystem::PlayMusic( std::string requestMusic, int32_t loop, int32_t 
 
 			if ( !next_music )
 			{
-				lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayMusic: '" << requestMusic << "' " << Mix_GetError() << std::endl;
+				lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayMusic: '" << requestMusic << "' " << Mix_GetError() << std::endl;
 			}
 			else
 			{
@@ -344,7 +344,7 @@ int32_t AudioSystem::PlayMusic( std::string requestMusic, int32_t loop, int32_t 
 				if ( Mix_FadeInMusic( next_music, loop, fadeLength ) == -1 )
 				{
 					Mix_FreeMusic( next_music );
-					lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayMusic: '" << requestMusic << "' " << Mix_GetError() << std::endl;
+					lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayMusic: '" << requestMusic << "' " << Mix_GetError() << std::endl;
 					return 0;
 				}
 				this->music = next_music;
@@ -353,7 +353,7 @@ int32_t AudioSystem::PlayMusic( std::string requestMusic, int32_t loop, int32_t 
 			return 0;
 		}
 	}
-	lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayMusic Error: '" << requestMusic << "' "  << std::endl;
+	lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | PlayMusic Error: '" << requestMusic << "' "  << std::endl;
 #endif
 	return 0;
 }

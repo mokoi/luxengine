@@ -9,8 +9,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 3. This notice may not be removed or altered from any source distribution.
 ****************************/
 
-#ifndef _PAWNENTITY_H_
-#define _PAWNENTITY_H_
+#ifndef PAWNENTITY_H_
+#define PAWNENTITY_H_
 
 #include "../stdheader.h"
 #include "../entity.h"
@@ -22,7 +22,7 @@ mem_pointer Lux_PawnEntity_Init(const char *entity_id, const char *entity_base, 
 void Lux_PawnEntity_Destroy(void * entity_data);
 
 /* Parent Entity */
-Entity * Lux_PawnEntity_GetParent(AMX *entity_data);
+Entity * Lux_PawnEntity_GetParent(AMX * entity_data);
 
 /* Loading/Saving */
 void Lux_PawnEntity_Restore(elix::File * current_save_file, void * entity_data);
@@ -35,8 +35,8 @@ bool Lux_PawnEntity_PushString( mem_pointer entity_data, std::string str, native
 bool Lux_PawnEntity_Push(mem_pointer entity_data, int32_t value);
 int32_t Lux_PawnEntity_Call(mem_pointer entity_data, char * function, native_pointer memstack);
 
-#if PLATFORMBITS == 64
-bool Lux_PawnEntity_PushArrayNative( mem_pointer entity_data, native_type array[], uint32_t size, mem_pointer memstack);
+#if PLATFORM_BITS == 64
+bool Lux_PawnEntity_PushArrayNative( mem_pointer entity_data, int64_t array[], uint32_t size, mem_pointer memstack);
 #endif
 
 #endif

@@ -104,7 +104,7 @@ int Lux_PawnEntity_Monitor(AMX * amx)
 		Entity * p = Lux_PawnEntity_GetParent(amx);
 		if ( t > p->starting_run_time + 120 )
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Script '" << p->_base << "' running to long (" << (amx->function_name ? amx->function_name : "main")  << "). Force Sleep" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Script '" << p->_base << "' running to long (" << (amx->function_name ? amx->function_name : "main")  << "). Force Sleep" << std::endl;
 			p->sleeping = true;
 			return AMX_ERR_SLEEP;
 		}
@@ -167,7 +167,7 @@ AMX * Lux_PawnEntity_LoadFile( const char * entity_name )
 	AMX * temp_amx = NULL;
 	std::string file_name = "./c/scripts/";
 	file_name.append(entity_name);
-	#if PLATFORMBITS == 64
+	#if PLATFORM_BITS == 64
 	file_name.append(".amx64");
 	#else
 	file_name.append(".amx");
@@ -192,7 +192,7 @@ AMX * Lux_PawnEntity_LoadFile( const char * entity_name )
 		}
 		else
 		{
-			lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Error " << entity_name << ": " << Lux_PawnEntity_StrError(AMX_ERR_FORMAT) << std::endl;
+			lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Error " << entity_name << ": " << Lux_PawnEntity_StrError(AMX_ERR_FORMAT) << std::endl;
 			goto function_exit;
 		}
 
@@ -202,7 +202,7 @@ AMX * Lux_PawnEntity_LoadFile( const char * entity_name )
 
 		if ( hdr.magic != AMX_MAGIC )
 		{
-			lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Error " << entity_name << ": " << Lux_PawnEntity_StrError(AMX_ERR_FORMAT) << std::endl;
+			lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << "Error " << entity_name << ": " << Lux_PawnEntity_StrError(AMX_ERR_FORMAT) << std::endl;
 			goto function_exit;
 		}
 
@@ -216,13 +216,13 @@ AMX * Lux_PawnEntity_LoadFile( const char * entity_name )
 
 		if ( result )
 		{
-			lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Error " << entity_name << ": " << Lux_PawnEntity_StrError(result) << std::endl;
+			lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Error " << entity_name << ": " << Lux_PawnEntity_StrError(result) << std::endl;
 		}
 
 		result = Lux_PawnEntity_Register( temp_amx );
 		if ( result  )
 		{
-			lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Error " << entity_name << ": " << Lux_PawnEntity_StrError(result) << std::endl;
+			lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Error " << entity_name << ": " << Lux_PawnEntity_StrError(result) << std::endl;
 		}
 		else
 		{
@@ -242,13 +242,13 @@ AMX * Lux_PawnEntity_LoadFile( const char * entity_name )
 	}
 	else
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Lux_PawnEntity_LoadFile Error " << entity_name << ": File not found" << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Lux_PawnEntity_LoadFile Error " << entity_name << ": File not found" << std::endl;
 	}
 
 
 	function_exit:
 
-	NULLIFY_ARRAY( temp_block );
+	NULLIFY_ARRAY( temp_block )
 
 	return temp_amx;
 }
@@ -313,7 +313,7 @@ AMX * Lux_PawnEntity_GetBaseAMX( const char * entity_base )
 		}
 		else
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Entity not found '" << entity_base << "'" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Entity not found '" << entity_base << "'" << std::endl;
 		}
 
 	}
@@ -324,7 +324,7 @@ AMX * Lux_PawnEntity_GetBaseAMX( const char * entity_base )
 
 inline void Lux_PawnEntity_UpdatePublicVariable( AMX * entity_data,  const char * variable_name, int32_t value)
 {
-	cell * cell_pointer = NULL;
+	cell * cell_pointer = nullptr;
 	if ( amx_FindPubVar( entity_data, variable_name, &cell_pointer) == AMX_ERR_NONE )
 	{
 		*cell_pointer = value;
@@ -340,7 +340,7 @@ inline void Lux_PawnEntity_UpdatePublicVariable( AMX * entity_data,  const char 
  */
 mem_pointer Lux_PawnEntity_Init( const char * entity_id, const char * entity_base, Entity * entity )
 {
-	AMX * entity_data = NULL;
+	AMX * entity_data = nullptr;
 
 #if PAWNCLONABLE
 	long datasize = 0, stackheap = 0;
@@ -356,7 +356,7 @@ mem_pointer Lux_PawnEntity_Init( const char * entity_id, const char * entity_bas
 		result = amx_MemInfo( base_amx, NULL, &datasize, &stackheap);
 		if ( result )
 		{
-			lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | AMX Clone Failed: "  << Lux_PawnEntity_StrError(result) << "." << std::endl;
+			lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | AMX Clone Failed: "  << Lux_PawnEntity_StrError(result) << "." << std::endl;
 			MessagePush( (char*)"%s: [Clone Error] %s", entity->_base.c_str(), Lux_PawnEntity_StrError(result) );
 		}
 		else
@@ -371,7 +371,7 @@ mem_pointer Lux_PawnEntity_Init( const char * entity_id, const char * entity_bas
 			int32_t result = amx_Clone(entity_data, base_amx, memory_block);
 			if ( result )
 			{
-				lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | AMX Clone Failed: "  << Lux_PawnEntity_StrError(result) << "." << std::endl;
+				lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | AMX Clone Failed: "  << Lux_PawnEntity_StrError(result) << "." << std::endl;
 				MessagePush( (char*)"%s: [Clone Error] %s", entity->_base.c_str(), Lux_PawnEntity_StrError(result) );
 
 				NULLIFY(entity_data);
@@ -533,7 +533,7 @@ void Lux_PawnEntity_Restore(elix::File * current_save_file, mem_pointer entity_d
 		}
 		else
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Lux_PawnEntity_Restore: Error restoring data. Skipping" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Lux_PawnEntity_Restore: Error restoring data. Skipping" << std::endl;
 			current_save_file->Seek( current_save_file->Tell() + (int32_t)saved_data_size );
 		}
 	}
@@ -650,9 +650,9 @@ bool Lux_PawnEntity_Run(mem_pointer entity_data, bool & scriptcontinue )
 		}
 		else
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_VISUAL_WARNING) << p->_base << ":0" << " [ID:" << p->id << "] " << Lux_PawnEntity_StrError(error) <<  " [" << amx->function_name<< "] " << std::endl;
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Entity:" << p->_base << "[ID:" << p->id << "]";
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Main Runtime Error - " << Lux_PawnEntity_StrError(error) << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_VISUAL_WARNING) << p->_base << ":0" << " [ID:" << p->id << "] " << Lux_PawnEntity_StrError(error) <<  " [" << amx->function_name<< "] " << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Entity:" << p->_base << "[ID:" << p->id << "]";
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Main Runtime Error - " << Lux_PawnEntity_StrError(error) << std::endl;
 			return false;
 		}
 	}
@@ -660,7 +660,7 @@ bool Lux_PawnEntity_Run(mem_pointer entity_data, bool & scriptcontinue )
 	return true;
 }
 
-#if PLATFORMBITS == 64
+#if PLATFORM_BITS == 64
 /**
  * @brief Lux_PawnEntity_PushArrayNative
  * @param entity_data
@@ -669,20 +669,19 @@ bool Lux_PawnEntity_Run(mem_pointer entity_data, bool & scriptcontinue )
  * @param stack_mem
  * @return
  */
-bool Lux_PawnEntity_PushArrayNative( mem_pointer entity_data, native_type array[], uint32_t size, native_pointer stack_mem)
+bool Lux_PawnEntity_PushArrayNative( mem_pointer entity_data, int64_t array[], uint32_t size, native_pointer stack_mem)
 {
 	if ( !entity_data )
 		return false;
 
 
-	#if PAWN_VERSION == 4
 	int32_t err = amx_PushArray((AMX*)entity_data, (cell**)&stack_mem, (cell*)array, size);
-	#else
-	int32_t err = amx_PushArray((AMX*)entity_data, (cell*)stack_mem, NULL, (cell*)array, size);
-	#endif
+	//Old version forPawn 3
+	//int32_t err = amx_PushArray((AMX*)entity_data, (cell*)stack_mem, NULL, (cell*)array, size);
+
 	if ( err )
 	{
-		lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
+		lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
 		return false;
 	}
 	return true;
@@ -704,28 +703,27 @@ bool Lux_PawnEntity_PushArray( mem_pointer entity_data, int32_t array[], uint32_
 {
 	if ( !entity_data && size == 0 )
 		return false;
-	native_type * native_array = NULL;
 
-	#if PLATFORMBITS == 64
-	native_array = new native_type[size];
+	#if PLATFORM_BITS == 64
+	int64_t * native_array = new int64_t[size];
 	uint32_t count = 0;
 	while (count < size)
 	{
 		native_array[count] = array[count];
 	}
 	#else
-	native_array = (native_type *)array;
+	int32_t * native_array = (int32_t *)array;
 	#endif
 
 	int32_t err = amx_PushArray((AMX*)entity_data, (cell**)&stack_mem, (cell*)native_array, size);
 	if ( err )
 	{
-		lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
+		lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
 		return false;
 	}
 	else
 	{
-#if PLATFORMBITS == 64
+#if PLATFORM_BITS == 64
 		count = 0;
 		while (count < size)
 		{
@@ -748,7 +746,7 @@ bool Lux_PawnEntity_PushString(mem_pointer entity_data, std::string str, native_
 	int32_t err = amx_PushString((AMX*)entity_data, (cell**)&stack_mem, str.c_str(), 0, 0);
 	if ( err )
 	{
-		lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
+		lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
 		return false;
 	}
 	return true;
@@ -766,7 +764,7 @@ bool Lux_PawnEntity_Push( mem_pointer entity_data, int32_t number)
 
 	if ( err )
 	{
-		lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
+		lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| " << Lux_PawnEntity_StrError(err) << std::endl;
 		return false;
 	}
 	return true;
@@ -804,7 +802,7 @@ int32_t Lux_PawnEntity_Call( mem_pointer entity_data, char * function, native_po
 	if ( error )
 	{
 		if ( function[0] != '@' )
-			lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Entity:" << p->_base << " - '" << function << "' not found." << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Entity:" << p->_base << " - '" << function << "' not found." << std::endl;
 		return_type = -2;
 	}
 	else
@@ -813,9 +811,9 @@ int32_t Lux_PawnEntity_Call( mem_pointer entity_data, char * function, native_po
 		error = amx_Exec(amx, &return_type, index);
 		if ( error )
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_VISUAL_WARNING) << p->_base << ":0" << " [ID:" << p->id << "] " << Lux_PawnEntity_StrError(error) <<  " [" << amx->function_name<< "] " << std::endl;
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Entity:" << p->_base << "[ID:" << p->id << "] ";
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Public Runtime Error  [" << function << "]" << Lux_PawnEntity_StrError(error) << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_VISUAL_WARNING) << p->_base << ":0" << " [ID:" << p->id << "] " << Lux_PawnEntity_StrError(error) <<  " [" << amx->function_name<< "] " << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Entity:" << p->_base << "[ID:" << p->id << "] ";
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Public Runtime Error  [" << function << "]" << Lux_PawnEntity_StrError(error) << std::endl;
 		}
 
 	}
@@ -1001,8 +999,7 @@ std::string Lux_PawnEntity_GetString(AMX * amx, cell param)
 int32_t Lux_PawnEntity_PublicVariable(AMX * amx, std::string varname, int32_t * new_value )
 {
 	int32_t ret = 0;
-	cell * cptr = NULL;
-	#if PAWN_VERSION == 4
+	cell * cptr = nullptr;
 
 	if ( amx_FindPubVar( amx, varname.c_str(), &cptr) == AMX_ERR_NONE )
 	{
@@ -1021,26 +1018,27 @@ int32_t Lux_PawnEntity_PublicVariable(AMX * amx, std::string varname, int32_t * 
 		ret = 0;
 	}
 	return ret;
-	#else
-	cell address;
-	if ( amx_FindPubVar( amx, varname.c_str(), &address) == AMX_ERR_NONE )
-	{
-		cptr = amx_Address( amx, address );
-		if ( new_value )
-		{
-			*cptr = *new_value;
-			ret = 1;
-		}
-		else
-		{
-			ret = *cptr;
-		}
-	}
-	else
-	{
-		ret = 0;
-	}
-	#endif
+
+	// Old Version for Pawn 3
+//	cell address;
+//	if ( amx_FindPubVar( amx, varname.c_str(), &address) == AMX_ERR_NONE )
+//	{
+//		cptr = amx_Address( amx, address );
+//		if ( new_value )
+//		{
+//			*cptr = *new_value;
+//			ret = 1;
+//		}
+//		else
+//		{
+//			ret = *cptr;
+//		}
+//	}
+//	else
+//	{
+//		ret = 0;
+//	}
+
 
 	return ret;
 

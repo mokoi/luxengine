@@ -72,7 +72,7 @@ bool LuxCanvas::Load( std::string file )
 
 	if ( !reader.Load(file_path))
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | " + file_path +" not a valid canvas file." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | " + file_path +" not a valid canvas file." << std::endl;
 		return false;
 	}
 	reader.ReadObjects( this->objects, false );

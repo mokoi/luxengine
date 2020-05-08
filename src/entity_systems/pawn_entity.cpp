@@ -293,7 +293,7 @@ static cell pawnEntityCreate(AMX *amx, const cell *params)
 						}
 						arg_ptr -= lemgth;
 						lemgth++;
-						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? NULL : &stack_mem) );
+						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? nullptr : &stack_mem) );
 					}
 					else if ( *cptr == 's' ) // String
 					{
@@ -309,15 +309,15 @@ static cell pawnEntityCreate(AMX *amx, const cell *params)
 						}
 						arg_ptr -= lemgth;
 						lemgth++;
-						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? NULL : &stack_mem) );
+						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? nullptr : &stack_mem) );
 					}
 					else if ( *cptr == 'd' ) // Value, passed by reference
 					{
-						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, 1, (stack_mem ? NULL : &stack_mem) );  //Pass an argument or array “by-reference”
+						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, 1, (stack_mem ? nullptr : &stack_mem) );  //Pass an argument or array “by-reference”
 					}
 					else if ( *cptr == 'n' ) //Value, passed by value
 					{
-						lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Warning: You can't 'passed by value' when creating a entity." << std::endl;
+						lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Warning: You can't 'passed by value' when creating a entity." << std::endl;
 					}
 					cptr--;
 					num_param--;
@@ -332,12 +332,12 @@ static cell pawnEntityCreate(AMX *amx, const cell *params)
 			wanted_entity->Init();
 		}
 
-		response = wanted_entity->hashid;
+		response = static_cast<cell>(wanted_entity->hashid);
 	}
 	else
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | EntityCreate ('" << entity_parent;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "' '" << entity_id << "') Failed." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | EntityCreate ('" << entity_parent;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "' '" << entity_id << "') Failed." << std::endl;
 		response = 0;
 	}
 	return response;
@@ -352,7 +352,7 @@ static cell pawnEntityDelete(AMX *amx, const cell *params)
 	ASSERT_PAWN_PARAM( amx, params, 1 );
 	Entity * wanted_entity = Lux_PawnEntity_GetEntity( amx, params[1] );
 
-	if ( wanted_entity != NULL )
+	if ( wanted_entity != nullptr )
 	{
 		wanted_entity->Delete();
 		return 1;
@@ -371,10 +371,10 @@ static cell pawnEntityPublicVariable(AMX *amx, const cell *params)
 
 	cell ret = 0;
 	Entity * wanted_entity = Lux_PawnEntity_GetEntity( amx, params[1] );
-	if ( wanted_entity != NULL )
+	if ( wanted_entity != nullptr )
 	{
 		std::string varname = Lux_PawnEntity_GetString(amx, params[2]);
-		ret = (cell)Lux_PawnEntity_PublicVariable( (AMX *)wanted_entity->_data, varname, NULL );
+		ret = (cell)Lux_PawnEntity_PublicVariable( (AMX *)wanted_entity->_data, varname, nullptr );
 	}
 	return ret;
 }
@@ -389,11 +389,11 @@ static cell pawnEntityPublicVariableSet(AMX *amx, const cell *params)
 
 	cell ret = 0;
 	Entity * wanted_entity = Lux_PawnEntity_GetEntity( amx, params[1]);
-	if ( wanted_entity != NULL )
+	if ( wanted_entity != nullptr )
 	{
 		int32_t value = (int32_t)params[3];
 		std::string varname = Lux_PawnEntity_GetString(amx, params[2]);
-		ret = (cell)Lux_PawnEntity_PublicVariable( (AMX *)wanted_entity->_data, varname, NULL );
+		ret = (cell)Lux_PawnEntity_PublicVariable( (AMX *)wanted_entity->_data, varname, nullptr );
 	}
 	return ret;
 }
@@ -407,7 +407,7 @@ static cell pawnEntityPublicFunction(AMX *amx, const cell *params)
 	ASSERT_PAWN_PARAM( amx, params, 4 );
 
 	Entity * wanted_entity = Lux_PawnEntity_GetEntity( amx, params[1] );
-	if ( wanted_entity != NULL )
+	if ( wanted_entity != nullptr )
 	{
 		if ( !wanted_entity->_data )
 		{
@@ -415,12 +415,12 @@ static cell pawnEntityPublicFunction(AMX *amx, const cell *params)
 		}
 		int f;
 		cell results = 0;
-		cell * cptr = NULL, * arg_ptr = NULL;
+		cell * cptr = nullptr, * arg_ptr = nullptr;
 		std::string function_name;
 		std::string arg_string;
 		uint32_t arg_count = 0;
 		uint32_t num_param = (uint32_t)( params[0]/sizeof(cell) ) - 4 ;
-		mem_pointer stack_mem = NULL;
+		mem_pointer stack_mem = nullptr;
 
 		function_name = Lux_PawnEntity_GetString(amx, params[2]);
 		arg_string = Lux_PawnEntity_GetString(amx, params[3]);
@@ -468,7 +468,7 @@ static cell pawnEntityPublicFunction(AMX *amx, const cell *params)
 						}
 						arg_ptr -= lemgth;
 						lemgth++;
-						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? NULL : &stack_mem) );
+						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? nullptr : &stack_mem) );
 					}
 					else if ( *cptr == 's' ) // String
 					{
@@ -484,15 +484,15 @@ static cell pawnEntityPublicFunction(AMX *amx, const cell *params)
 						}
 						arg_ptr -= lemgth;
 						lemgth++;
-						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? NULL : &stack_mem) );
+						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, lemgth, (stack_mem ? nullptr : &stack_mem) );
 					}
 					else if ( *cptr == 'd' ) // Value, passed by reference
 					{
-						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, 1, (stack_mem ? NULL : &stack_mem) );  //Pass an argument or array “by-reference”
+						wanted_entity->callbacks->PushArrayNative(wanted_entity->_data, arg_ptr, 1, (stack_mem ? nullptr : &stack_mem) );  //Pass an argument or array “by-reference”
 					}
 					else if ( *cptr == 'n' ) //Value, passed by value
 					{
-						//lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << num_param << ": " << *cptr  << " = " << *arg_ptr << std::endl;
+						//lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << num_param << ": " << *cptr  << " = " << *arg_ptr << std::endl;
 						int32_t value = (int32_t)*arg_ptr;
 						wanted_entity->callbacks->Push(wanted_entity->_data,(int32_t)*arg_ptr);
 					}
@@ -536,12 +536,12 @@ static cell pawnEntitiesNext(AMX *amx, const cell *params)
 
 	uint8_t respone = 0;
 	cell *cptr, * str;
-	char * entity_name = NULL;
+	char * entity_name = nullptr;
 	uint32_t map_id = params[2];
 
 	entity_name = Lux_FFI_Entities_Next( map_id, &respone );
 
-	if ( entity_name != NULL )
+	if ( entity_name != nullptr )
 	{
 		respone = 1;
 		// Store String
@@ -655,11 +655,11 @@ static cell pawnCollisionGetCurrent(AMX *amx, const cell *params)
 	int32_t dist = 0;
 	int32_t rect = 0;
 	int32_t type = 0;
-	cell * current_ptr = NULL;
-	cell * angle_ptr = NULL;
-	cell * dist_ptr = NULL;
-	cell * rect_ptr = NULL;
-	cell * type_ptr = NULL;
+	cell * current_ptr = nullptr;
+	cell * angle_ptr = nullptr;
+	cell * dist_ptr = nullptr;
+	cell * rect_ptr = nullptr;
+	cell * type_ptr = nullptr;
 
 	hit_count = Lux_FFI_Entity_Object_Collision_Calculate_Current( wanted_entity, &entity_hit, &angle, &dist, &rect, &type );
 	if ( hit_count > 0 )
@@ -731,7 +731,7 @@ static cell pawnPathGetPoint(AMX *amx, const cell *params)
 
 	if ( Lux_FFI_Path_Point( params[1], point, &x, &y, &ms_length ) )
 	{
-		cell * value_ptr = NULL;
+		cell * value_ptr = nullptr;
 
 		value_ptr = amx_Address(amx, params[3]);
 		if (value_ptr)
@@ -770,7 +770,7 @@ static cell pawnPathMoveObject(AMX *amx, const cell *params)
 
 	if ( result >= 0 )
 	{
-		cell * xptr = NULL;
+		cell * xptr = nullptr;
 
 		xptr = amx_Address(amx, params[3]);
 		if (xptr)

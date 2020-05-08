@@ -60,7 +60,7 @@ GameSystem::~GameSystem()
  */
 bool GameSystem::Init( )
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " > Opening the Game" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " > Opening the Game" << std::endl;
 
 	this->objects->Init();
 
@@ -132,7 +132,7 @@ void GameSystem::Loop( LuxState engine_state )
  */
 bool GameSystem::Close()
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " < Closing the Game" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " < Closing the Game" << std::endl;
 
 	this->global_entities->Close();
 

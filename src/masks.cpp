@@ -44,7 +44,7 @@ bool Lux_Mask_ReadPGM( std::stringstream & mask_file, Lux_Mask * mask )
 		mask_file.read((char*)&mask->width, sizeof(uint16_t));
 		mask_file.read((char*)&mask->height, sizeof(uint16_t));
 		mask->length = mask->width * mask->height;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Mask Overflow: " << mask->width << " " << mask->height <<" " << mask->length << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Mask Overflow: " << mask->width << " " << mask->height <<" " << mask->length << std::endl;
 		mask->data = new uint8_t[mask->length];
 		mask->ref++;
 
@@ -56,7 +56,7 @@ bool Lux_Mask_ReadPGM( std::stringstream & mask_file, Lux_Mask * mask )
 				mask->data[count] = (uint8_t)ch;
 			}
 			else
-				lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Mask Overflow: " << ch << std::endl;
+				lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Mask Overflow: " << ch << std::endl;
 			count++;
 		}
 
@@ -150,7 +150,7 @@ void Lux_Mask_FillArea(Lux_Mask * dest, uint16_t x, uint16_t y, uint16_t width, 
 	{
 		if ( (dest_pos + copy_length) > dest->length )
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Fill Area is larger then Mask" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Fill Area is larger then Mask" << std::endl;
 			break;
 		}
 		memset( dest->data + dest_pos, value, copy_length );
@@ -180,7 +180,7 @@ void Lux_Mask_FillArea(Lux_Mask * dest, uint16_t x, uint16_t y, uint16_t width, 
 	{
 		if ( (dest_pos + copy_length) > dest->length )
 		{
-			lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Fill Area is larger then Mask" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Fill Area is larger then Mask" << std::endl;
 			break;
 		}
 		memset( dest->data + dest_pos, value, copy_length );

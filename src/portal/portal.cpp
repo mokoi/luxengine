@@ -86,7 +86,7 @@ void LuxPortal::add_previous_game( std::string path )
 	if ( path.at(0) == '\'' && path.length() > 3 )
 		path = path.substr(1, path.length() - 2);
 
-	#ifdef __GNUWIN32__
+	#ifdef PLATFORM_WINDOWS
 	elix::string::Replace( path, "\\\\", "\\" );
 	elix::string::Replace( path, "/", "\\" );
 	#endif
@@ -368,7 +368,7 @@ int32_t LuxPortal::online_page( LuxRect page_rect )
 
 	if ( xml.Error() )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Portal Error:" << xml.GetErrorStr1() << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Portal Error:" << xml.GetErrorStr1() << std::endl;
 		return GUI_PORTAL_RECENT;
 	}
 

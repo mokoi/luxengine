@@ -35,14 +35,14 @@ bool MapXMLReader::Load( std::string file )
 	this->xml_file = MokoiGame_GetXML(file);
 	if ( this->xml_file->Error() )
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_LOG) << this->xml_file->GetErrorStr1() <<  std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_LOG) << this->xml_file->GetErrorStr1() <<  std::endl;
 		return false;
 	}
 
 	this->root = this->xml_file->RootElement();
 	if ( !this->root || strcmp( this->root->Value(), "map") )
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_LOG) << file << " not a valid map file." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_LOG) << file << " not a valid map file." << std::endl;
 		return false;
 	}
 

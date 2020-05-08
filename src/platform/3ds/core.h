@@ -34,8 +34,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 			screen_buffer frame_buffer[2];
 		public:
 			void SystemMessage(uint8_t type, std::string message);
-			std::ostream& SystemMessage( const char *file, int line, uint8_t type );
-			std::ostream& SystemMessage(uint8_t type);
+			std::ostream& SystemStreamMessage( const char *file, int line, uint8_t type );
+			std::ostream& SystemStreamMessage(uint8_t type);
 
 			void AbleOutput(bool able) {}
 			uint32_t WasInit(uint32_t flag);

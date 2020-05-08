@@ -127,7 +127,7 @@ bool LuxSaveState::PreSave( EntityManager * entity_manager )
 
 	if ( lux::game_data->GetPublicDirectory().length() == 0 )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Invalid Save Directory." <<  std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Invalid Save Directory." <<  std::endl;
 		return false;
 	}
 
@@ -155,14 +155,14 @@ bool LuxSaveState::PreSave( EntityManager * entity_manager )
 	}
 
 	/* Open File */
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Saving to " << this->file_name << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Saving to " << this->file_name << std::endl;
 
 	/* Todo: Add overwrite warning */
 	this->save_file = new elix::File( elix::directory::User( lux::game_data->GetPublicDirectory(), false, this->file_name), true );
 
 	if ( !this->save_file->Exist() )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "===========================Saved Failed========================" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "===========================Saved Failed========================" << std::endl;
 		delete this->save_file;
 		return false;
 	}
@@ -193,8 +193,8 @@ bool LuxSaveState::Save(GameSystem * old_world, EntityManager * old_entity_manag
 		return false;
 	}
 
-	lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "================ Save ===============" << std::endl;
-	lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "============= Type: "  << +this->save_type << " =============" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "================ Save ===============" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "============= Type: "  << +this->save_type << " =============" << std::endl;
 
 	lux::entities->SetSaveMode( this->save_type );
 
@@ -308,12 +308,12 @@ bool LuxSaveState::PreLoad(EntityManager *entity_manager)
 	}
 
 	/* Open File */
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Restoring " << this->file_name << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Restoring " << this->file_name << std::endl;
 
 	this->save_file = new elix::File( elix::directory::User( lux::game_data->GetPublicDirectory(), false, this->file_name), false );
 	if ( !this->save_file->Exist() )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "===========================Loading Failed========================" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "===========================Loading Failed========================" << std::endl;
 		delete this->save_file;
 		return false;
 	}
@@ -419,8 +419,8 @@ bool LuxSaveState::Restore( GameSystem * new_world, EntityManager * new_entity_m
 
 		lux::screen::display("Loading Saved Game");
 
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "================ Load ===============" << std::endl;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "============= Type: "  << +this->save_type << " =============" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "================ Load ===============" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "============= Type: "  << +this->save_type << " =============" << std::endl;
 
 		lux::entities->SetSaveMode( this->save_type );
 

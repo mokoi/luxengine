@@ -66,7 +66,7 @@ bool LuxEngine::CreateDialog(std::string text, LuxWidget dialog, std::string * a
 {
 	if ( lux::display == NULL )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "No Display Available. Message: " << text << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "No Display Available. Message: " << text << std::endl;
 		return false;
 	}
 
@@ -123,7 +123,7 @@ void LuxEngine::FatalError(std::string reason)
 	{
 		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR, reason);
 
-		if ( lux::display == NULL )
+		if ( lux::display == nullptr )
 		{
 			lux::display = new DisplaySystem( );
 		}

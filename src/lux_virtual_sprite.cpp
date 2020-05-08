@@ -51,7 +51,7 @@ bool LuxVirtualSprite::Load( std::string file )
 
 	if ( !reader.Load("./sprites/virtual/" + file + ".xml"))
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_LOG) << " sprites/virtual/" + file + ".xml not a valid canvas file." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_LOG) << " sprites/virtual/" + file + ".xml not a valid canvas file." << std::endl;
 		return false;
 	}
 

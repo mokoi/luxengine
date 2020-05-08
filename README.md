@@ -17,8 +17,5 @@ Build Requirements
 
 How to Build
 ----------------------
-When building from source, elix (https://github.com/lukesalisbury/elix) is 
-required to be checked out to the same parent directory as luxengine.
-- 'luxengine/' can be built by run 'make'.
-
+Running 'make all' should work
 

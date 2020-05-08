@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 #include "win32.h"
 #else
 #include "unix.h"

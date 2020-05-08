@@ -1,18 +1,16 @@
+#Settings
+INCLUDE_OPENGL=TRUE
+INCLUDE_NETWORK=FALSE
+DOWNLOADER_MODE=basic
+
 ifeq ($(SUPPORTPATH), )
-
-$(error Please set SUPPORTPATH variable before running make. )
-
+	$(error Please set SUPPORTPATH variable before running make. )
 endif
 
 LDFLAGS+=-L"$(SUPPORTPATH)/lib"
 CPPFLAGS+=-I"$(SUPPORTPATH)/include" -I"$(SUPPORTPATH)/include/sdl"
 
 #Settings
-INCLUDE_PAWN = TRUE
-NETWORK = TRUE
-DOWNLOADER_MODE = basic
-OPENGL = TRUE
-
 CPP = g++
 CC = gcc
 
@@ -20,15 +18,13 @@ ASMTYPE = win32
 ASM = 
 
 BIN  = luxengine-sdl.exe
-BINEXT = .exe
-BUILDDIR = ./bin
+
 
 RES = $(OBJDIR)/lux.res
 RES_SOURCE = res/lux.rc
 
 ifeq ($(PLATFORMBITS), 64)
 	RES_OUTPUT = pe-x86-64
-	OBJDIR += 64
 else
 	RES_OUTPUT = pe-i386
 	ASM = nasmw
@@ -36,7 +32,6 @@ else
 endif
 
 #Static Settings
-PLATFORM = __GNUWIN32__
 PLATFORM_DIRECTORY = platform/pc
 
 PLATFORM_LIBS = -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_gfx -lz -lSDL_mixer -lwinmm -static-libgcc -lopengl32 -lws2_32

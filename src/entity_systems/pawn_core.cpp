@@ -166,32 +166,22 @@ static cell core_swapchars(AMX *amx,const cell *params)
   return c;
 }
 
-static cell core_tolower(AMX *amx,const cell *params)
+static cell core_tolower(AMX *amx, const cell *params)
 {
-  (void)amx;
-  #if defined __WIN32__ || defined _WIN32 || defined WIN32
-	return (cell)CharLower((LPTSTR)params[1]);
-  #elif defined _Windows
-	return (cell)AnsiLower((LPSTR)params[1]);
-  #else
+	(void)amx;
 	if ((unsigned)(params[1]-'A')<26u)
 	  return params[1]+'a'-'A';
 	return params[1];
-  #endif
+
 }
 
 static cell core_toupper(AMX *amx,const cell *params)
 {
   (void)amx;
-  #if defined __WIN32__ || defined _WIN32 || defined WIN32
-	return (cell)CharUpper((LPTSTR)params[1]);
-  #elif defined _Windows
-	return (cell)AnsiUpper((LPSTR)params[1]);
-  #else
 	if ((unsigned)(params[1]-'a')<26u)
 	  return params[1]+'A'-'a';
 	return params[1];
-  #endif
+
 }
 
 static cell core_min(AMX *amx,const cell *params)

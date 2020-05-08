@@ -187,7 +187,7 @@ extern  "C" {
 #define MIN_AMX_VER_JIT  11     /* AMX version supported by the JIT */
 
 #if !defined PAWN_CELL_SIZE
-  #define PAWN_CELL_SIZE 32     /* by default, use 32-bit cells */
+  #define PAWN_CELL_SIZE PLATFORM_BITS     /* by default, use 32-bit cells */
 #endif
 #if PAWN_CELL_SIZE==16
   typedef uint16_t  ucell;

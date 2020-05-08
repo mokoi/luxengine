@@ -14,8 +14,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <dirent.h>
 #include <fstream>
 
-#include <SDL_joystick.h>
-#include <SDL_hints.h>
+#include <SDL2/SDL_joystick.h>
+#include <SDL2/SDL_hints.h>
 
 
 
@@ -28,11 +28,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "game_system.h"
 #include "platform_functions.h"
 
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 	#define _WIN32_IE 0x0600
 	#include <io.h>
 	#include <shlobj.h>
-	#include <SDL_syswm.h>
+	#include <SDL2/SDL_syswm.h>
 #endif
 
 /* Network Thread */
@@ -95,7 +95,7 @@ CoreSystem::CoreSystem()
 
 	memset( this->controller, 0, sizeof(SDL_GameController*)*8);
 	memset( this->timer, 0, sizeof(function_time)*32);
-#if PLATFORMBITS == RaspberryPI
+#if PLATFORM_BITS == RaspberryPI
 	this->native_window = SDL_CreateWindow(PROGRAM_NAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_HIDDEN|SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN_DESKTOP|SDL_WINDOW_MOUSE_CAPTURE );
 #else
 	this->native_window = SDL_CreateWindow(PROGRAM_NAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_HIDDEN|SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE );
@@ -146,7 +146,7 @@ CoreSystem::~CoreSystem()
 
 }
 
-std::ostream& CoreSystem::SystemMessage(const char *file, int line, uint8_t type  )
+std::ostream& CoreSystem::SystemStreamMessage(const char *file, int line, uint8_t type  )
 {
 	switch ( type )
 	{
@@ -184,14 +184,14 @@ std::ostream& CoreSystem::SystemMessage(const char *file, int line, uint8_t type
 	}
 }
 
-std::ostream& CoreSystem::SystemMessage( uint8_t type )
+std::ostream& CoreSystem::SystemStreamMessage( uint8_t type )
 {
-	return this->SystemMessage( NULL, 0, type );
+	return this->SystemStreamMessage( NULL, 0, type );
 }
 
 void CoreSystem::SystemMessage( uint8_t type, std::string message )
 {
-	this->SystemMessage( NULL, 0, type ) << message << std::endl;
+	this->SystemStreamMessage( NULL, 0, type ) << message << std::endl;
 }
 
 void CoreSystem::AbleOutput(bool able)
@@ -237,7 +237,7 @@ bool CoreSystem::InitSubSystem(uint32_t flag)
 	{
 		if ( SDL_InitSubSystem(flag) < 0 )
 		{
-			this->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Couldn't init subsystems. " << SDL_GetError() << std::endl;
+			this->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Couldn't init subsystems. " << SDL_GetError() << std::endl;
 			return false;
 		}
 		return true;
@@ -691,7 +691,7 @@ void CoreSystem::CheckTouch( DisplaySystem * display, uint8_t touch_events_count
 
 					if ( hit )
 					{
-						button->state = (this->touch_events[c].type = SDL_FINGERDOWN ? 1 : 1);
+						button->state = (this->touch_events[c].type == SDL_FINGERDOWN ? 1 : 0);
 					}
 					else
 					{
@@ -1041,7 +1041,7 @@ void CoreSystem::VirtualGamepadRemoveItem( uint32_t ident )
 bool CoreSystem::RunExternalProgram( std::string program, std::string argument )
 {
 	std::string cmdline = elix::program::RootDirectory( ) + ELIX_DIR_SSEPARATOR + program + " " + argument;
-	this->SystemMessage( SYSTEM_MESSAGE_LOG ) << "Running " << program << " Status " << system( cmdline.c_str() ) << std::endl;
+	this->SystemStreamMessage( SYSTEM_MESSAGE_LOG ) << "Running " << program << " Status " << system( cmdline.c_str() ) << std::endl;
 
 	return true;
 }

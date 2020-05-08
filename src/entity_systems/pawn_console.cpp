@@ -27,13 +27,13 @@ static int cons_putchar(void * dest, char ch)
 
 static int debugmsg_putstr(void * dest,const char * str)
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << str;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << str;
 	return 0;
 }
 
 static int debugmsg_putchar(void * dest, char ch)
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << ch;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << ch;
 	return 0;
 }
 
@@ -133,9 +133,9 @@ static cell pawnConsoleOutput(AMX *amx, const cell *params)
 	info.f_putchar=debugmsg_putchar;
 
 	cstr = amx_Address(amx, params[1]);
-	lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "> ";
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "> ";
 	amx_printstring(amx,cstr,&info);
-	lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << std::endl;
 
 	return 0;
 }
@@ -149,10 +149,10 @@ static cell pawnConsoleOutput(AMX *amx, const cell *params)
 static cell pawnConsoleInfomation(AMX *amx, const cell *params)
 {
 	Entity * wanted = Lux_PawnEntity_GetParent(amx);
-	lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "> ";
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "> ";
 	if ( wanted )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << wanted->Infomation() <<std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << wanted->Infomation() <<std::endl;
 	}
 
 
@@ -164,5 +164,5 @@ const AMX_NATIVE_INFO console_Natives[] = {
 	{ "ConsoleOutput", pawnConsoleOutput },
 	{ "ConsoleInfomation", pawnConsoleInfomation },
 	{ "ConsoleLog", pawnConsoleLog },
-	{ NULL, NULL }				/* terminator */
+	{ nullptr, nullptr }				/* terminator */
 };

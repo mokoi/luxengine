@@ -26,7 +26,7 @@
 #include <assert.h>
 #include "pawn_helper.h"
 
-#if defined __GNUWIN32__ || defined __WIN32__ || defined _WIN32 || defined _Windows
+#if defined PLATFORM_WINDOWS || defined __WIN32__ || defined _WIN32 || defined _Windows
 	#include <windows.h>
 	#include <mmsystem.h>
 #endif

@@ -65,8 +65,8 @@ GraphicSystem GraphicsOpenGL = {
 
 
 /* Shared */
-extern Uint32 native_render_flags;
-extern Uint32 native_window_flags;
+extern uint32_t native_render_flags;
+extern uint32_t native_window_flags;
 extern SDL_Window * native_window;
 extern SDL_Renderer * native_renderer;
 extern std::string native_window_title;
@@ -82,8 +82,8 @@ SDL_Rect native_graphics_viewpoint;
 SDL_GLContext native_context;
 float opengl_graphic_ratio_width = 1.00;
 float opengl_graphic_ratio_height = 1.00;
-float opengl_graphic_ratio = 1.33;
-LuxPolygon * opengl_graphic_cursor = NULL;
+float opengl_graphic_ratio = 1.33f;
+LuxPolygon * opengl_graphic_cursor = nullptr;
 SDL_Rect native_screen_position;
 bool native_screen_stretching = false;
 bool native_screen_match = false;
@@ -195,7 +195,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 	native_context = SDL_GL_CreateContext(native_window);
 	if ( !native_context )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Couldn't create Renderer. " << SDL_GetError() << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Couldn't create Renderer. " << SDL_GetError() << std::endl;
 		return false;
 	}
 
@@ -205,10 +205,10 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 
 	SDL_GL_MakeCurrent(native_window, native_context);
 
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "OpenGL Renderer: " << glGetString(GL_RENDERER) << " " << glGetString(GL_VERSION) << std::endl;
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "OpenGL Feature: ";
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << ( SDL_GL_ExtensionSupported((char *)"GL_ARB_texture_non_power_of_two") ? "NPOT" : "POT");
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << ( SDL_GL_ExtensionSupported((char *)"GL_EXT_framebuffer_object") ? " FBO" : "") << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "OpenGL Renderer: " << glGetString(GL_RENDERER) << " " << glGetString(GL_VERSION) << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "OpenGL Feature: ";
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << ( SDL_GL_ExtensionSupported((char *)"GL_ARB_texture_non_power_of_two") ? "NPOT" : "POT");
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << ( SDL_GL_ExtensionSupported((char *)"GL_EXT_framebuffer_object") ? " FBO" : "") << std::endl;
 
 
 	native_graphics_dimension.w = screen_dimension->w;
@@ -262,7 +262,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 		GLenum fbo_status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
 		if ( fbo_status != GL_FRAMEBUFFER_COMPLETE_EXT )
 		{
-			lux::core->SystemMessage( SYSTEM_MESSAGE_LOG ) << "Framebuffer error " << fbo_status << std::endl;
+			lux::core->SystemStreamMessage( SYSTEM_MESSAGE_LOG ) << "Framebuffer error " << fbo_status << std::endl;
 		}
 		else
 		{
@@ -273,7 +273,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 	}
 	else
 	{
-		lux::core->SystemMessage( SYSTEM_MESSAGE_LOG ) << "No Framebuffer Support" << std::endl;
+		lux::core->SystemStreamMessage( SYSTEM_MESSAGE_LOG ) << "No Framebuffer Support" << std::endl;
 	}
 
 	return true;
@@ -475,7 +475,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 {
 	if ( !png->HasContent() )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "PNG is empty" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "PNG is empty" << std::endl;
 		return false;
 	}
 
@@ -513,7 +513,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 	}
 	else
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "PNG is empty" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "PNG is empty" << std::endl;
 	}
 	delete [] pixels;
 	/*  ^ PNG Image */
@@ -641,7 +641,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
  */
  LuxSprite * Lux_OGL_PNGtoSprite( uint8_t * data, uint32_t size )
 {
-	LuxSprite * sprite = NULL;
+	LuxSprite * sprite = nullptr;
 	elix::Image * png = new elix::Image(data, size);
 
 	if ( png->HasContent() )
@@ -689,7 +689,7 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 			GLenum fbo_status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
 			if ( fbo_status != GL_FRAMEBUFFER_COMPLETE_EXT )
 			{
-				lux::core->SystemMessage( SYSTEM_MESSAGE_LOG ) << "Framebuffer error " << fbo_status << std::endl;
+				lux::core->SystemStreamMessage( SYSTEM_MESSAGE_LOG ) << "Framebuffer error " << fbo_status << std::endl;
 			}
 			glClearColor(0.0, 0.0, 0.0, 0.0);
 			glClear( GL_COLOR_BUFFER_BIT );

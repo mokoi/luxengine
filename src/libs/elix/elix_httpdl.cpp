@@ -16,7 +16,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <iostream>
 #include "elix/elix_string.hpp"
 
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 	#include <winsock.h>
 #elif __NDS__
 	#include <nds.h>
@@ -209,7 +209,7 @@ namespace elix {
 
 		int32_t SocketInit(int &sockDesc)
 		{
-			#ifdef __GNUWIN32__
+			#ifdef PLATFORM_WINDOWS
 			WSADATA wsaData;
 			if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0)
 			{
@@ -247,7 +247,7 @@ namespace elix {
 
 		void SocketClose(int &sockDesc)
 		{
-			#ifdef __GNUWIN32__
+			#ifdef PLATFORM_WINDOWS
 			closesocket(sockDesc);
 			WSACleanup();
 			#elif __NDS__

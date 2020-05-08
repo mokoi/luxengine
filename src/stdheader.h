@@ -13,7 +13,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #endif
 
 #ifndef PROGRAM_VERSION
-#define PROGRAM_VERSION "Nightly " __DATE__ " "__TIME__
+#define PROGRAM_VERSION "Nightly " __DATE__ " " __TIME__
 #endif
 
 #ifndef PROGRAM_VERSION_STABLE
@@ -28,8 +28,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 #define PACKAGE_GET_URL "http://localhost/get/"
 #endif
 
-#ifndef _STDHEADER_
-#define _STDHEADER_
+#ifndef STDHEADER
+#define STDHEADER
 
 #define LUX_INIT_BASE		0x00000001
 #define LUX_INIT_AUDIO		0x00000010
@@ -62,8 +62,8 @@ typedef uint32_t int_hash;
 #define TIMER_START(function) static uint8_t timer = __COUNTER__; uint64_t start_time = get_cpu_time();
 #define TIMER_END(function) lux::core->RecordFunctionTimer(timer, function, (get_cpu_time() - start_time));
 
-#define NULLIFY(x) if (x != NULL) { delete(x); x = NULL; }
-#define NULLIFY_ARRAY(x) if (x != NULL) { delete [] x; x = NULL; }
+#define NULLIFY(x) if (x != nullptr) { delete(x); x = nullptr; }
+#define NULLIFY_ARRAY(x) if (x != nullptr) { delete [] x; x = nullptr; }
 
 #define IS_BIT_SET(value, bit) (value) & ((1<<(bit)))
 

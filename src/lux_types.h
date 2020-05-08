@@ -15,7 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <map>
 class MapObject;
 
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 	#define LUX_DIR_SEPARATOR '\\'
 	#define LUX_DIR_SSEPARATOR "\\"
 #else

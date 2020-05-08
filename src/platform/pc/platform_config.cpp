@@ -12,7 +12,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 void Config::PlatformSettings()
 {
-	#ifdef __GNUWIN32__
+	#ifdef PLATFORM_WINDOWS
 	platform = "win32";
 	#endif
 

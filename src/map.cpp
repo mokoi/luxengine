@@ -36,7 +36,7 @@ bool ObjectSort(MapObject * a, MapObject * b );
  */
 MokoiMap::MokoiMap( std::string name, uint32_t width, uint32_t height)
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " > Opening map '" << name << "'"  << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " > Opening map '" << name << "'"  << std::endl;
 
 	this->InitialSetup(name);
 
@@ -56,7 +56,7 @@ MokoiMap::MokoiMap( elix::File * current_save_file )
 {
 	if ( this->Restore( current_save_file ) )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " > Restore map '" << this->map_name << "'"  << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " > Restore map '" << this->map_name << "'"  << std::endl;
 	}
 }
 
@@ -65,7 +65,7 @@ MokoiMap::MokoiMap( elix::File * current_save_file )
  */
 MokoiMap::~MokoiMap()
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " < Closing Map '" << this->map_name << "'"<< std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " < Closing Map '" << this->map_name << "'"<< std::endl;
 
 	for ( MapObjectListIter p = this->object_cache.begin(); p != this->object_cache.end(); p++ )
 	{
@@ -228,7 +228,7 @@ uint8_t MokoiMap::GetGrid( uint8_t axis )
  */
 bool MokoiMap::Init()
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " > MokoiMap Init " << this->map_name << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " > MokoiMap Init " << this->map_name << std::endl;
 
 	lux::screen::display("Loading Map: " + this->map_name);
 	if ( this->LoadFile() )
@@ -308,7 +308,7 @@ bool MokoiMap::Loop()
 		if ( screen_number > (this->dimension_height * (this->dimension_width-1))) // Bottom row
 			cy = 1;
 
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "Screen Loaded:";
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "Screen Loaded:";
 		for (; x < cx; x++)
 		{
 			for (ty = y; ty < cy; ty++)
@@ -316,12 +316,12 @@ bool MokoiMap::Loop()
 				screen = this->GetScreen( (screen_number+x) + (ty*this->dimension_width) );
 				if ( screen )
 				{
-					lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << (int)((screen_number+x) + (ty*this->dimension_width)) << "(" << Screen2X(screen_number,this->dimension_width)+x << "x" << Screen2Y(screen_number,this->dimension_width)+ty << "),";
+					lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << (int)((screen_number+x) + (ty*this->dimension_width)) << "(" << Screen2X(screen_number,this->dimension_width)+x << "x" << Screen2Y(screen_number,this->dimension_width)+ty << "),";
 					screen->Init();
 				}
 			}
 		}
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << std::endl;
 	}
 	else
 	{
@@ -342,7 +342,7 @@ bool MokoiMap::Loop()
 			y = 0;
 		if ( screen_number > (this->dimension_height * (this->dimension_width-1))) // Bottom row
 			cy = 1;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "Screen Loaded:";
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "Screen Loaded:";
 		for (; x < cx; x++)
 		{
 			for (ty = y; ty < cy; ty++)
@@ -350,12 +350,12 @@ bool MokoiMap::Loop()
 				screen = this->GetScreen( (screen_number+x) + (ty*this->dimension_width) );
 				if ( screen )
 				{
-					lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << (int)((screen_number+x) + (ty*this->dimension_width)) << "(" << Screen2X(screen_number,this->dimension_width)+x << "x" << Screen2Y(screen_number,this->dimension_width)+ty << "),";
+					lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << (int)((screen_number+x) + (ty*this->dimension_width)) << "(" << Screen2X(screen_number,this->dimension_width)+x << "x" << Screen2Y(screen_number,this->dimension_width)+ty << "),";
 					screen->Init();
 				}
 			}
 		}
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << std::endl;
 	}
 	return true;
 }
@@ -366,7 +366,7 @@ bool MokoiMap::Loop()
 */
 bool MokoiMap::Close()
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << " < MokoiMap Close " << this->map_name << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << " < MokoiMap Close " << this->map_name << std::endl;
 
 	this->active = false;
 	this->server = false;
@@ -530,7 +530,7 @@ void MokoiMap::SetPosition( fixed position[3] )
 	this->offset_position[1] = position[1];
 	this->offset_position[2] = position[2];
 
-	lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "Wrap: " << (int)this->wrap_mode << " - Centerview:" << (int)this->centered_view <<  std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "Wrap: " << (int)this->wrap_mode << " - Centerview:" << (int)this->centered_view <<  std::endl;
 	/*
 		Keeps Offset for moving offscreen
 	*/
@@ -879,13 +879,13 @@ bool MokoiMap::LoadDimension()
 		tinyxml2::XMLDocument * xml_file = MokoiGame_GetXML("./maps/" + this->map_name + ".xml");
 		if ( xml_file->Error() )
 		{
-			//lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | " << xml_file->ErrorDesc() << " Row: " << xml_file->ErrorRow() << std::endl;
+			//lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | " << xml_file->ErrorDesc() << " Row: " << xml_file->ErrorRow() << std::endl;
 			delete xml_file;
 			return false;
 		}
 		if ( !xml_file->RootElement() || strcmp( xml_file->RootElement()->Value(), "map") )
 		{
-			lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | maps/" + this->map_name + ".xml not a vamap_nameap file." << std::endl;
+			lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | maps/" + this->map_name + ".xml not a vamap_nameap file." << std::endl;
 			delete xml_file;
 			return false;
 		}
@@ -936,7 +936,7 @@ bool MokoiMap::LoadFile()
 	{
 		if ( !reader.Load("./maps/" + this->map_name + ".xml"))
 		{
-			lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | maps/" + this->map_name + ".xml not a valid file." << std::endl;
+			lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | maps/" + this->map_name + ".xml not a valid file." << std::endl;
 			return false;
 		}
 

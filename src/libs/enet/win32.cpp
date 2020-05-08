@@ -2,7 +2,7 @@
  @file  win32.c
  @brief ENet Win32 system specific functions
 */
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 
 #include <time.h>
 #include "enet.h"

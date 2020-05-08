@@ -35,20 +35,20 @@ namespace colour {
 }
 
 namespace lux {
-	LuxEngine * engine = NULL;
-	CoreSystem * core = NULL;
-	UserInterface * gui = NULL;
-	Config * global_config = NULL;
-	GameConfig * config = NULL;
-	AudioSystem * audio = NULL;
-	DisplaySystem * display = NULL;
-	GameSystem * game_system = NULL;
-	EntityManager * entities = NULL;
-	MokoiGame * game_data = NULL;
-	EntitySystem * entity_system = NULL;
-	PlatformMedia * media = NULL;
+	LuxEngine * engine = nullptr;
+	CoreSystem * core = nullptr;
+	UserInterface * gui = nullptr;
+	Config * global_config = nullptr;
+	GameConfig * config = nullptr;
+	AudioSystem * audio = nullptr;
+	DisplaySystem * display = nullptr;
+	GameSystem * game_system = nullptr;
+	EntityManager * entities = nullptr;
+	MokoiGame * game_data = nullptr;
+	EntitySystem * entity_system = nullptr;
+	PlatformMedia * media = nullptr;
 
-	GameSystem * oldgame = NULL;
+	GameSystem * oldgame = nullptr;
 	namespace screen {
 		void display( std::string message );
 	}
@@ -98,10 +98,10 @@ LuxEngine::LuxEngine( std::string executable )
 	lux::core = new CoreSystem();
 	lux::global_config = new Config();
 
-	lux::core->SystemMessage( SYSTEM_MESSAGE_LOG, PROGRAM_NAME" - Version "PROGRAM_VERSION" Log" );
+	lux::core->SystemMessage( SYSTEM_MESSAGE_LOG, PROGRAM_NAME" - Version " PROGRAM_VERSION " Log" );
 	lux::core->SystemMessage( SYSTEM_MESSAGE_LOG, "-------------------------------------" );
 
-	lux::core->SystemMessage( SYSTEM_MESSAGE_ERROR, PROGRAM_NAME" - Version "PROGRAM_VERSION" Error Log" );
+	lux::core->SystemMessage( SYSTEM_MESSAGE_ERROR, PROGRAM_NAME" - Version " PROGRAM_VERSION " Error Log" );
 	lux::core->SystemMessage( SYSTEM_MESSAGE_ERROR, "-------------------------------------" );
 
 	if ( executable[0] != 0 )
@@ -140,29 +140,29 @@ LuxEngine::~LuxEngine()
 {
 	this->Close();
 
-	NULLIFY(lux::global_config);
-	NULLIFY(lux::media);
-	NULLIFY(lux::core);
+	NULLIFY(lux::global_config)
+	NULLIFY(lux::media)
+	NULLIFY(lux::core)
 }
 
 void LuxEngine::Close()
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "<-----------------LuxEngine::Close-----------------|" << std::endl;
-	lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "<-----------------LuxEngine::Close-----------------|" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "<-----------------LuxEngine::Close-----------------|" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "<-----------------LuxEngine::Close-----------------|" << std::endl;
 
 	if ( lux::game_system )
 	{
 		lux::game_system->Close();
 	}
 
-	NULLIFY(lux::entities);
-	NULLIFY(lux::game_system);
-	NULLIFY(lux::audio);
-	NULLIFY(lux::gui);
-	NULLIFY(lux::display);
-	NULLIFY(lux::entity_system);
-	NULLIFY(lux::config);
-	NULLIFY(lux::game_data);
+	NULLIFY(lux::entities)
+	NULLIFY(lux::game_system)
+	NULLIFY(lux::audio)
+	NULLIFY(lux::gui)
+	NULLIFY(lux::display)
+	NULLIFY(lux::entity_system)
+	NULLIFY(lux::config)
+	NULLIFY(lux::game_data)
 
 	this->state = IDLE;
 
@@ -198,7 +198,7 @@ bool LuxEngine::Start( std::string project_file )
 		lux::global_config->SetString( "project.file", project_file );
 	}
 
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Loading Game: " << project_file << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Loading Game: " << project_file << std::endl;
 
 	lux::entity_system = new EntitySystem();
 	lux::game_data = new MokoiGame( project_file );
@@ -230,7 +230,7 @@ bool LuxEngine::Start( std::string project_file )
 			lux::screen::display("Loading Content Package");
 			if ( !lux::game_data->LoadPackage( package_main_name ) )
 			{
-				this->ShowDialog("Can not find " + package_main_name + "\n"PACKAGE_GET_URL + package_main_name + "\nExiting game.", DIALOGOK);
+				this->ShowDialog("Can not find " + package_main_name + "\n" PACKAGE_GET_URL + package_main_name + "\nExiting game.", DIALOGOK);
 				this->state = GAMEERROR;
 				return false;
 			}
@@ -242,7 +242,7 @@ bool LuxEngine::Start( std::string project_file )
 			lux::screen::display("Loading Content Package");
 			if ( !lux::game_data->LoadPackage( package_music_name ) )
 			{
-				this->ShowDialog("Can not find " + package_music_name + "\n"PACKAGE_GET_URL + package_music_name + "\nExiting game.", DIALOGOK);
+				this->ShowDialog("Can not find " + package_music_name + "\n" PACKAGE_GET_URL + package_music_name + "\nExiting game.", DIALOGOK);
 				this->state = GAMEERROR;
 				return false;
 			}
@@ -254,7 +254,7 @@ bool LuxEngine::Start( std::string project_file )
 			lux::screen::display("Loading Content Package");
 			if ( !lux::game_data->LoadPackage( package_music_name ) )
 			{
-				this->ShowDialog("Can not find " + package_music_name + "\n"PACKAGE_GET_URL + package_music_name + "\nExiting game.", DIALOGOK);
+				this->ShowDialog("Can not find " + package_music_name + "\n" PACKAGE_GET_URL + package_music_name + "\nExiting game.", DIALOGOK);
 				this->state = GAMEERROR;
 				return false;
 			}
@@ -266,7 +266,7 @@ bool LuxEngine::Start( std::string project_file )
 			lux::screen::display("Loading Content Package");
 			if ( !lux::game_data->LoadPackage( package_music_name ) )
 			{
-				this->ShowDialog("Can not find " + package_music_name + "\n"PACKAGE_GET_URL + package_music_name + "\nExiting game.", DIALOGOK);
+				this->ShowDialog("Can not find " + package_music_name + "\n" PACKAGE_GET_URL + package_music_name + "\nExiting game.", DIALOGOK);
 				this->state = GAMEERROR;
 				return false;
 			}
@@ -283,7 +283,7 @@ bool LuxEngine::Start( std::string project_file )
 			std::vector<std::string> patch_list = lux::config->GetArray("patches.list");
 			for( uint8_t i = 0; i < patch_list.size(); i++ )
 			{
-				lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Patch " << patch_list[i] << " " << lux::game_data->AddPackage( patch_list[i] ) << std::endl;
+				lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Patch " << patch_list[i] << " " << lux::game_data->AddPackage( patch_list[i] ) << std::endl;
 			}
 		}
 	}
@@ -366,7 +366,7 @@ void LuxEngine::Refresh()
 		if ( this->state == RUNNING )
 		{
 			this->UpdateFPS();
-			lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "FPS: " << (this->game_fps_last < 30 ? "§c" : "§a") << this->game_fps_last << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "FPS: " << (this->game_fps_last < 30 ? "§c" : "§a") << this->game_fps_last << std::endl;
 		}
 		else
 		{
@@ -680,9 +680,9 @@ bool LuxEngine::HandleSave()
 
 	saved_game.SetSlot( this->save_system_slot );
 
-	if ( saved_game.Save( lux::game_system, lux::entities, NULL, 0 ) )
+	if ( saved_game.Save( lux::game_system, lux::entities, nullptr, 0 ) )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "game saved" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "game saved" << std::endl;
 		return true;
 	}
 
@@ -737,10 +737,10 @@ bool LuxEngine::HandleLoad()
 	lux::game_system = restored_world;
 	lux::entities = restored_entity_manager;
 
-	if ( saved_game.Restore( restored_world, restored_entity_manager, NULL, 0 ) )
+	if ( saved_game.Restore( restored_world, restored_entity_manager, nullptr, 0 ) )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Game restored" << std::endl;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "removing old world  & enitites" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Game restored" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "removing old world & enitites" << std::endl;
 
 		lux::game_system = current_world;
 		lux::entities = current_entity_manager;
@@ -763,7 +763,7 @@ bool LuxEngine::HandleLoad()
 	}
 	else
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "removing failed world & enitites" << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "removing failed world & enitites" << std::endl;
 
 		lux::game_system = current_world;
 		lux::entities = current_entity_manager;
@@ -820,7 +820,7 @@ bool LuxEngine::ReadSaveInfo(uint8_t slot, int32_t * info, uint32_t length, uint
 	saved_game.SetInformation( project_id, LUX_SAVE_COOKIE_TYPE, "", NULL );
 	saved_game.SetSlot( slot );
 
-	if ( saved_game.Restore( NULL, NULL, info, length ) )
+	if ( saved_game.Restore( nullptr, nullptr, info, length ) )
 	{
 		return true;
 	}

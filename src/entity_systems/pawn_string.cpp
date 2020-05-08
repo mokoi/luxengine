@@ -163,14 +163,8 @@ static cell extractchar(cell *string,int index,int mklower)
   else
 	c=string[index];
   if (mklower) {
-	#if defined __WIN32__ || defined _WIN32 || defined WIN32
-	  c=(cell)CharLower((LPTSTR)c);
-	#elif defined _Windows
-	  c=(cell)AnsiLower((LPSTR)c);
-	#else
 	  if ((unsigned int)(c-'A')<26u)
 		c+='a'-'A';
-	#endif
   } /* if */
   return c;
 }

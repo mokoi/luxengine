@@ -72,7 +72,7 @@ bool MokoiMapScreen::Init()
 
 			if ( !lux::display->AddObjectToLayer(object->layer, object, true) )
 			{
-				lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << object->TypeName() << " (" << object->sprite << ") add failed" << std::endl;
+				lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << object->TypeName() << " (" << object->sprite << ") add failed" << std::endl;
 				object->type = 0;
 			}
 
@@ -171,8 +171,8 @@ void MokoiMapScreen::DrawMask( fixed position[3] )
 
 	if ( this->_mask )
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << "Mask Memory:" << this->_mask->length  << "bytes. Offset:" << this->_offset_x << "x" << this->_offset_y << std::endl;
-		lux::core->SystemMessage(SYSTEM_MESSAGE_DEBUG) << this->_mask->width << "x" << this->_mask->height << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << "Mask Memory:" << this->_mask->length  << "bytes. Offset:" << this->_offset_x << "x" << this->_offset_y << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_DEBUG) << this->_mask->width << "x" << this->_mask->height << std::endl;
 
 		for( uint32_t i = 0; i < this->_mask->length; i += 2 )
 		{

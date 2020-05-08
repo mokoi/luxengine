@@ -1,6 +1,7 @@
 #ifndef REUSABLE_GRAPHICS_SYSTEM_HPP
 #define REUSABLE_GRAPHICS_SYSTEM_HPP
 
+#include "lux_sprite.h"
 
 LuxSprite * Lux_NATIVE_PNGtoSprite( uint8_t * data, uint32_t size );
 bool Lux_NATIVE_LoadSpriteSheet( std::string name, std::map<uint32_t, LuxSprite *> * children );

@@ -1,9 +1,9 @@
 #Settings
-INCLUDE_PAWN = TRUE
-NETWORK = FALSE
-DOWNLOADER_MODE = curl
+INCLUDE_OPENGL=TRUE
+INCLUDE_NETWORK=FALSE
+DOWNLOADER_MODE=basic
 
-BIN  = luxengine
+BIN=luxengine
 CPP = g++
 CC = gcc
 ASM = 
@@ -13,7 +13,7 @@ ASMTYPE = elf
 PLATFORM = LINUX
 PLATFORM_DIRECTORY = platform/sdl2
 
-PLATFORM_LIBS = `sdl2-config --libs`  -lSDL2_mixer -lcurl -Wl,-rpath -Wl,\$$ORIGIN/lib
+PLATFORM_LIBS = `sdl2-config --libs`  -lSDL2_mixer -Wl,-rpath -Wl,\$$ORIGIN/lib
 PLATFORM_FLAGS = `sdl2-config --cflags` -DHAS_SOCKLEN_T -DHAVE_UNISTD_H -DHAVE_INTTYPES_H -DHAVE_STDINT_H -DFLOATPOINT -DNO_ZLIB -DUSE_SDL2
 
 ifeq ($(NETWORK), TRUE)
@@ -38,4 +38,4 @@ endif
 
 
 installdeps:
-	apt-get install libsdl2.0-dev libsdl-mixer2.0-dev
+	apt-get install libsdl2-dev libsdl2-mixer-dev

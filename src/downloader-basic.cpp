@@ -27,7 +27,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #endif
 #include <sstream>
 
-#ifdef __GNUWIN32__
+#ifdef PLATFORM_WINDOWS
 	#include <winsock.h>
 #elif __NDS__
 	#include <nds.h>
@@ -102,7 +102,7 @@ std::string Lux_Util_FillAddress(std::string address, uint16_t port, sockaddr_in
 			port = port_t;
 		address = address.erase(cut_at);
 	}
-	header = "GET " + path + " HTTP/1.0\r\nAccept: */*\r\nHost: " + address + "\r\nUser-Agent:LuxEngine "PROGRAM_VERSION"\r\n\r\n";
+	header = "GET " + path + " HTTP/1.0\r\nAccept: */*\r\nHost: " + address + "\r\nUser-Agent:LuxEngine " PROGRAM_VERSION "\r\n\r\n";
 	addr.sin_family = AF_INET;
 
 	#if defined (__GAMECUBE__) || defined (__WII__)
@@ -116,7 +116,7 @@ std::string Lux_Util_FillAddress(std::string address, uint16_t port, sockaddr_in
 		addr.sin_addr.s_addr = 0;
 	addr.sin_port = htons(port);
 
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Downloading:" << path << " from " << address << ":" << port<< std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Downloading:" << path << " from " << address << ":" << port<< std::endl;
 
 	return header;
 }
@@ -155,7 +155,7 @@ uint16_t Lux_Util_ParseHTTPHeader( HeaderInfo & header )
 			{
 				std::stringstream stream(lines[i].substr(9, 3));
 				stream >> header.status;
-				lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Header: '" << lines[i].substr(5,3) << "' '" << lines[i].substr(9, 3) << "' '" << lines[i].substr(13) << "'" << std::endl;
+				lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Header: '" << lines[i].substr(5,3) << "' '" << lines[i].substr(9, 3) << "' '" << lines[i].substr(13) << "'" << std::endl;
 			}
 			else
 			{
@@ -163,7 +163,7 @@ uint16_t Lux_Util_ParseHTTPHeader( HeaderInfo & header )
 				if ( std::string::npos != slipt_point )
 				{
 					header.response[lines[i].substr(0, slipt_point)] = lines[i].substr(slipt_point+2);
-					lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Header: '" << lines[i].substr(0, slipt_point) << "' '" << lines[i].substr(slipt_point+2) << "'" << std::endl;
+					lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Header: '" << lines[i].substr(0, slipt_point) << "' '" << lines[i].substr(slipt_point+2) << "'" << std::endl;
 				}
 			}
 		}
@@ -233,7 +233,7 @@ bool Lux_Util_ReadHTTPData(int32_t sockDesc, std::string & urlData, uint32_t & c
 
 int32_t Lux_Util_SocketInit(int &sockDesc)
 {
-	#ifdef __GNUWIN32__
+	#ifdef PLATFORM_WINDOWS
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0)
 	{
@@ -266,7 +266,7 @@ int32_t Lux_Util_SocketInit(int &sockDesc)
 
 void Lux_Util_SocketClose(int &sockDesc)
 {
-	#ifdef __GNUWIN32__
+	#ifdef PLATFORM_WINDOWS
 	closesocket(sockDesc);
 	WSACleanup();
 	#elif __NDS__
@@ -313,7 +313,7 @@ int32_t Lux_Util_FileDownloader( std::string urlArg, std::string origFile, UserI
 		region.x /= 4;
 		region.y = (region.y / 2) - 25;
 		region.w /= 2;
-		dialog = ui->AddChild(region, EMPTYWINDOW, (LuxColour){150, 150, 200, 200}, "Downloading\n" + urlArg + "\n");
+		dialog = ui->AddChild(region, EMPTYWINDOW, "Downloading\n" + urlArg + "\n");
 		dialog->SetText("Downloading\n" + urlArg + "\n", urlArg.length() );
 	}
 
@@ -326,7 +326,7 @@ int32_t Lux_Util_FileDownloader( std::string urlArg, std::string origFile, UserI
 			if ( header.status == 302 )
 			{
 				std::string new_location = header.response["Location"].substr(7);
-				lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "downloaded moved to " << new_location << std::endl;
+				lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "downloaded moved to " << new_location << std::endl;
 				requestHeader = Lux_Util_FillAddress( new_location, 80, serv_addr );
 
 				urlData.clear();
@@ -394,7 +394,7 @@ int32_t Lux_Util_FileDownloaderThread( void * data )
 			if ( header.status == 302 )
 			{
 				std::string new_location = header.response["Location"].substr(7);
-				lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Downloaded moved to " << new_location << std::endl;
+				lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Downloaded moved to " << new_location << std::endl;
 				requestHeader = Lux_Util_FillAddress( new_location, 80, serv_addr );
 
 				urlData.clear();

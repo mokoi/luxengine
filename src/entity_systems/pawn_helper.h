@@ -29,7 +29,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 	#include "pawn.h"
 
 	//#define CELLMIN (-1 << (8*sizeof(cell) - 1))
-	#if PLATFORMBITS == 64
+	#if PLATFORM_BITS == 64
 	//INT64_MIN
 	#define CELLMIN (-9223372036854775807LL - 1)
 	#else

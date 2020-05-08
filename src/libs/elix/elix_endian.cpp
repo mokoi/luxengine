@@ -12,29 +12,29 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #if defined ENDIAN_SDL
 	#include <SDL/SDL.h>
-#elif __GNUWIN32__
+#elif PLATFORM_WINDOWS
 	#include <winsock2.h>
 	#define ENDIAN_NETWORK 1
-#elif __linux__
+#elif PLATFORM_LINUX
 	#include <arpa/inet.h>
 	#define ENDIAN_NETWORK 1
 #elif  FLASCC
 	#include <arpa/inet.h>
 	#define ENDIAN_NETWORK 1
-#elif defined (__NDS__)
+#elif defined (PLATFORM_NDS)
 	#include <sys/socket.h>
 	#define ENDIAN_NETWORK 1
-#elif defined (__3DS__)
+#elif defined (PLATFORM_3DS)
 	#include <arpa/inet.h>
 	#include <sys/socket.h>
 	#define ENDIAN_NETWORK 1
-#elif defined (DREAMCAST)
+#elif defined (PLATFORM_DREAMCAST)
 	#include <endian.h>
 	#define ENDIAN_NETWORK 1
-#elif defined (__GAMECUBE__) || defined (__WII__)
+#elif defined (PLATFORM_GAMECUBE) || defined (PLATFORM_WII)
 	#include <network.h>
 	#define ENDIAN_NETWORK 1
-#elif defined __apple__
+#elif defined PLATFORM_OSX
 	#include <SDL.h>
 	#define ENDIAN_SDL 1
 #else

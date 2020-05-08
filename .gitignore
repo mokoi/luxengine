@@ -231,3 +231,6 @@ pip-log.txt
 #QT creator
 *.user
 *.user.*
+LuxEngine.cflags
+
+LuxEngine.cxxflags

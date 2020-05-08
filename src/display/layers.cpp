@@ -102,7 +102,7 @@ bool Layer::AddObject(MapObject * new_object, bool static_object)
 			return true;
 		}
 	}
-	lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | No more object can be added to this layer. " << std::endl;
+	lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | No more object can be added to this layer. " << std::endl;
 	return false;
 }
 

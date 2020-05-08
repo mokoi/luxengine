@@ -31,7 +31,7 @@ Entity::Entity(std::string base, std::string id, uint32_t mapid, LuxEntityCallba
 		this->_data = this->callbacks->Init( this->id.c_str(), this->_base.c_str(), this );
 		if ( !this->_data )
 		{
-			lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_LOG) << "No data for " << this->id << "|" << this->_base << std::endl;
+			lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_LOG) << "No data for " << this->id << "|" << this->_base << std::endl;
 		}
 		else
 		{
@@ -240,10 +240,10 @@ int32_t Entity::Call(std::string function, char * format, ...)
 		return_value = this->callbacks->Call(this->_data, (char*)function.c_str(), stack_mem);
 
 		if ( return_value == -1 )
-			lux::core->SystemMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| Call from " << this->id << " Failed" << std::endl;
+			lux::core->SystemStreamMessage(__FUNCTION__, __LINE__, SYSTEM_MESSAGE_ERROR ) <<  "| Call from " << this->id << " Failed" << std::endl;
 		return return_value;
 	}
-	lux::core->SystemMessage( __FUNCTION__, __LINE__, SYSTEM_MESSAGE_LOG ) << "'" << this->id << "' Call Function Failed '" << function << "'" << std::endl;
+	lux::core->SystemStreamMessage( __FUNCTION__, __LINE__, SYSTEM_MESSAGE_LOG ) << "'" << this->id << "' Call Function Failed '" << function << "'" << std::endl;
 	return -1;
 }
 

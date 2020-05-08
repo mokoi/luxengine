@@ -67,6 +67,14 @@ void read_image( std::string file )
 
 }
 
+void string_trim( std::string & source )
+{
+	if ( source.size() ) {
+		source.erase(source.find_last_not_of("\r\n")+1);
+		source.erase(0, source.find_first_not_of("\r\n"));
+	}
+}
+
 void read_sheet( std::string file )
 {
 	size_t file_size = 0;
@@ -83,7 +91,7 @@ void read_sheet( std::string file )
 	{
 		file_size++;
 		std::getline(source_file, c);
-
+		string_trim(c);
 		target_file_content << "\t\"" << c << "\"";
 
 		if ( source_file.peek() == std::char_traits<char>::eof() )

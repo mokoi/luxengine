@@ -44,7 +44,7 @@ int32_t SDL2_AcceratedRendering()
 		{
 			if ( !SDL_GetRenderDriverInfo( c, &info) )
 			{
-				if (info.flags & SDL_RENDERER_ACCELERATED);
+				if (info.flags & SDL_RENDERER_ACCELERATED)
 					return c;
 			}
 			c++;
@@ -125,7 +125,7 @@ void Lux_SDL2_OpenMessageWindow(  )
 
 		if ( !debug_renderer )
 		{
-			lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Couldn't create Renderer. " << SDL_GetError() << std::endl;
+			lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Couldn't create Renderer. " << SDL_GetError() << std::endl;
 		}
 		else
 		{

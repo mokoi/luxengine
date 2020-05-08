@@ -28,7 +28,7 @@ int16_t Memory_ReadShort( uint8_t * from, uint32_t offset )
 LuxSprite::LuxSprite( GraphicSystem graphic )
 {
 	this->graphics = graphic;
-	this->data = NULL;
+	this->data = nullptr;
 
 	this->hash = 0;
 	this->flag = 0;
@@ -88,7 +88,7 @@ void LuxSprite::FreeData(  )
 	else
 	{
 		if ( this->data )
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "LuxSprite Memory Leak" << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "LuxSprite Memory Leak" << std::endl;
 	}
 }
 

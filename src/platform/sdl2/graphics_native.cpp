@@ -176,7 +176,7 @@ bool Lux_NATIVE_Init(LuxRect * screen_dimension, LuxRect * display_dimension )
 	native_renderer = SDL_CreateRenderer(native_window, preferred_render, native_render_flags);
 	if ( !native_renderer )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Couldn't create Renderer. " << SDL_GetError() << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Couldn't create Renderer. " << SDL_GetError() << std::endl;
 		return false;
 	}
 	SDL_SetRenderDrawColor(native_renderer, 0, 0, 0, 255);
@@ -336,7 +336,7 @@ bool Lux_NATIVE_SetFullscreen( bool able )
 		return true;
 	else
 	{
-		lux::core->SystemMessage(SYSTEM_MESSAGE_ERROR) << "Can't not make the change the display size." << std::endl;
+		lux::core->SystemStreamMessage(SYSTEM_MESSAGE_ERROR) << "Can't not make the change the display size." << std::endl;
 		return false;
 	}
 }
@@ -434,7 +434,7 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 
 	if ( !native_renderer )
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Not a valid target surface." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Not a valid target surface." << std::endl;
 		return;
 	}
 
@@ -442,7 +442,7 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 
 	if ( surface == NULL )
 	{
-		lux::core->SystemMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Not a valid surface." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__ , __LINE__, SYSTEM_MESSAGE_ERROR) << " | Not a valid surface." << std::endl;
 		return;
 	}
 
@@ -574,7 +574,7 @@ void Lux_NATIVE_DrawRect( LuxRect dest_rect, ObjectEffect effects)
 {
 	if ( !native_renderer )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Not a valid surface." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Not a valid surface." << std::endl;
 		return;
 	}
 
@@ -604,7 +604,7 @@ void Lux_NATIVE_DrawPolygon ( int16_t * x_point, int16_t *y_point, uint16_t poin
 {
 	if ( !native_renderer )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Not a valid surface." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Not a valid surface." << std::endl;
 		return;
 	}
 
@@ -633,7 +633,7 @@ void Lux_NATIVE_DrawPolygon ( int16_t * x_point, int16_t *y_point, uint16_t poin
 {
 	if ( !native_renderer )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Not a valid surface." << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << " Not a valid surface." << std::endl;
 		return;
 	}
 

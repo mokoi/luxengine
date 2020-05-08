@@ -21,7 +21,7 @@ DisplayBitFont::DisplayBitFont( SDL_Renderer * renderer)
 		}
 		this->textures[c] = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB1555, SDL_TEXTUREACCESS_STATIC, 8, 8);
 		if ( !this->textures[c] )
-			lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "DisplayFont: " << SDL_GetError() << std::endl;
+			lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "DisplayFont: " << SDL_GetError() << std::endl;
 		SDL_SetTextureBlendMode( this->textures[c], SDL_BLENDMODE_BLEND);
 		//SDL_SetTextureBlendMode( this->textures[c], SDL_BLENDMODE_NONE);
 

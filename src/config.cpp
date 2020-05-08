@@ -21,7 +21,7 @@ void ConfigResource::Print()
 	std::map<std::string, std::string>::iterator iter;
 	for ( iter = this->values.begin(); iter != this->values.end(); iter++ )
 	{
-		lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << iter->first << "=" << iter->second << std::endl;
+		lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_LOG) << iter->first << "=" << iter->second << std::endl;
 	}
 
 }
@@ -114,8 +114,8 @@ Config::Config( )
 	this->path = elix::program::RootDirectory();
 	this->platform = "posix";
 
-	this->SetString( "project.file", this->path + ELIX_DIR_SSEPARATOR"game"ELIX_DIR_SSEPARATOR ); /* Path to Default Game */
-	this->SetString( "project.title", PROGRAM_NAME" "PROGRAM_VERSION );
+	this->SetString( "project.file", this->path + ELIX_DIR_SSEPARATOR "game" ELIX_DIR_SSEPARATOR ); /* Path to Default Game */
+	this->SetString( "project.title", PROGRAM_NAME " " PROGRAM_VERSION );
 	this->SetString( "language.default", "en" );
 	this->SetString( "language.available", "en;English" );
 	this->SetNumber( "player.number", 1 );
@@ -165,7 +165,7 @@ Config::~Config()
 		}
 		else
 		{
-			lux::core->SystemMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_ERROR ) << file->GetError();
+			lux::core->SystemStreamMessage(__FILE__, __LINE__, SYSTEM_MESSAGE_ERROR ) << file->GetError();
 		}
 		delete file;
 	}
