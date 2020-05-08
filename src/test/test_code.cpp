@@ -120,6 +120,7 @@ bool luxtest::Sprites( ObjectEffect effect )
 
 void luxtest::start()
 {
+lux::core = new CoreSystem();
 	lux::config = new GameConfig();
 	lux::config->SetString("window.title", "Test Mode");
 

@@ -35,7 +35,9 @@ GameSystem::GameSystem()
 	this->map_counter.value = 0xFFFFFFFF;
 	this->map_counter.grid.section = 1; /* Section counter */
 
+#ifdef BOX2DENABLED
 	this->physic_world = new b2World( b2Vec2(0.0, 9.8) );
+#endif
 	this->objects = new GlobalObjects();
 	this->global_entities = new EntitySection("main", 0);
 
@@ -46,9 +48,11 @@ GameSystem::GameSystem()
  */
 GameSystem::~GameSystem()
 {
-	NULLIFY( this->global_entities );
-	NULLIFY( this->objects );
+	NULLIFY( this->global_entities )
+	NULLIFY( this->objects )
+#ifdef BOX2DENABLED
 	NULLIFY( this->physic_world );
+#endif
 }
 
 

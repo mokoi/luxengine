@@ -109,7 +109,9 @@ bool GameConfig::Has( std::string key )
 	std::map<std::string, std::string>::iterator iter = this->values.find(key);
 	if ( iter == this->values.end() )
 	{
-		return lux::global_config->Has(key);
+		if ( lux::global_config )
+			return lux::global_config->Has(key);
+		return false;
 	}
 	return true;
 }
@@ -119,7 +121,10 @@ std::string GameConfig::GetString( std::string key, bool alphanumeric )
 	std::map<std::string, std::string>::iterator iter = this->values.find(key);
 	if ( iter == this->values.end() )
 	{
-		return lux::global_config->GetString(key);
+		if ( lux::global_config )
+			return lux::global_config->GetString(key);
+		else
+			return "";
 	}
 	return iter->second;
 }

@@ -8,15 +8,13 @@ Permission is granted to anyone to use this software for any purpose, including 
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 ****************************/
-#ifndef _DISPLAYNDS_H_
-#define _DISPLAYNDS_H_
+#ifndef DISPLAYNDS_H_
+#define DISPLAYNDS_H_
 #include "display/display_types.h"
 
-#ifndef
-#define
-#endif
 
-bool Lux_NATIVE_Init(LuxRect screen_dimension, LuxRect *display_dimension );
+
+bool Lux_NATIVE_Init(LuxRect *screen_dimension, LuxRect *display_dimension );
 void Lux_NATIVE_Destory();
 void Lux_NATIVE_Display2Screen( int32_t * x, int32_t * y);
 void Lux_NATIVE_Background(LuxColour fillcolor);

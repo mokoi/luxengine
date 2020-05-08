@@ -1,15 +1,17 @@
 @echo off
-set MAKE=make.exe
+set MAKE=make.exe -j4
 
 set DEVKITARM=C:\dev\devkitpro\devkitARM
 set DEVKITPRO=C:\dev\devkitpro
 
-set PATH=%PATH%;%DEVKITARM%\bin\
+set PATH=%PATH%;%DEVKITARM%\bin\;%DEVKITPRO%\tools\bin
 
-set BUILDOS=3ds
+set PLATFORMOS=3ds
 set BUILDDEBUG=FALSE
-set IP=192.168.16.99
+set IP=192.168.16.163
 set EMU=G:\emus\citra\citra.exe 
+
+set EMU=C:\Users\luke\Downloads\Browser\nightly-mingw\citra.exe 
 @cd ..
 @echo --------------------------
 IF EXIST %DEVKITARM%\bin\arm-none-eabi-gcc.exe ( @echo Found %DEVKITARM%\bin\arm-none-eabi-gcc.exe ) ELSE (GOTO error)
@@ -30,6 +32,7 @@ if '%choice%'=='r' goto run
 if '%choice%'=='b' goto build
 if '%choice%'=='c' goto clean
 if '%choice%'=='q' goto buildrun
+if '%choice%'=='d' goto debug
 if '%choice%'=='x' goto end
 cls
 echo "%choice%" is not valid please try again
@@ -44,6 +47,11 @@ goto menu
 :run
 cls
 %EMU% bin\3ds\luxengine.3dsx
+goto menu
+
+:debug
+cls
+gdb
 goto menu
 
 :buildrun
@@ -62,7 +70,7 @@ goto menu
 
 
 :error
-@echo Path '%MINGWPATH%' not found. Edit this file and enter the corrent path to mingw
+@echo Path '%DEVKITARM%' not found. Edit this file and enter the corrent path to mingw
 pause
 GOTO end
 

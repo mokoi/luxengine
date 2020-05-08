@@ -13,7 +13,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 	#include <stdarg.h>
 	#include <3ds.h>
-	#include <sf2d.h>
+	#include <citro2d.h>
 	#include "base_core.h"
 
 	typedef struct {
@@ -53,7 +53,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 			int16_t GetInput(InputDevice device, uint32_t device_number, int32_t symbol);
 			bool InputLoopGet(DisplaySystem * display, uint16_t & key);
 			bool TextListen(bool able) { return false; }
-
+			void RecordFunctionTimer( uint8_t timer, const char * name, uint64_t length_msec );
+			void OutputInformation();
 	public:
 			gfxScreen_t primary_screen;
 			gfxScreen_t secondary_screen;

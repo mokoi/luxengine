@@ -14,6 +14,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "config.h"
 #include "display/display.h"
 
+#include <3ds.h>
+#include <citro2d.h>
+
 /* Local variables */
 touchPosition touch_screen;
 circlePosition circle_pos;
@@ -43,13 +46,15 @@ CoreSystem::CoreSystem()
 	this->secondary_screen = GFX_BOTTOM;
 
 
-	/*
+	
 	aptInit();
-	hidInit(NULL);
-	gfxInit(GSP_BGR8_OES,GSP_BGR8_OES,false);
-	*/
-	sf2d_init();
-	//consoleInit(this->secondary_screen, NULL);
+	hidInit();
+	gfxInitDefault();
+	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
+	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
+	C2D_Prepare();
+	
+	consoleInit(this->secondary_screen, nullptr);
 
 
 	this->good = true;
@@ -57,6 +62,8 @@ CoreSystem::CoreSystem()
 
 CoreSystem::~CoreSystem()
 {
+	C2D_Fini();
+	C3D_Fini();
 
 	gfxExit();
 	hidExit();
@@ -265,4 +272,30 @@ int16_t CoreSystem::GetInput(InputDevice device, uint32_t device_number, int32_t
 			return 0;
 	}
 
+}
+
+void CoreSystem::OutputInformation()
+{
+	std::stringstream buffer;
+	for( uint8_t q; q < 32; q++ )
+	{
+		if ( this->timer[q].calls != 0 )
+		{
+			buffer << this->timer[q].function << "\t§7" << this->timer[q].calls << "\t§c" << ((double)this->timer[q].msec / (double)this->timer[q].calls) /1000.0  << "ms" << std::endl;
+		}
+
+	}
+	lux::display->graphics.DrawMessage( buffer.str(), 2 );
+}
+void CoreSystem::RecordFunctionTimer( uint8_t timer, const char * name, uint64_t length_msec )
+{
+	if ( timer < 32 )
+	{
+		if ( this->timer[timer].calls == 0 )
+		{
+			this->timer[timer].function.assign(name);
+		}
+		this->timer[timer].calls++;
+		this->timer[timer].msec += length_msec;
+	}
 }

@@ -30,19 +30,20 @@ Some Code taken from Easy GL2D http://rel.betterwebber.com
 #include "elix/elix_png.hpp"
 
 #include <3ds.h>
+#include <citro2d.h>
 
 /* Global Variables */
 struct NativeTexture {
-	sf2d_texture * texture;
-	int32_t address;
+	C3D_Tex texture;
 	uint32_t w, h, tw, th;
 	bool pot, loaded;
 	std::string file;
 };
 
 gfxScreen_t current_screen;
-
+C3D_RenderTarget * render_targets[2];
 uint32_t native_screen_assignment = 0xC0000040; // 1100 0000 0000 0000 0000 0000 0100 0000
+u32 clrClear = 0xFFFFFFFF;
 
 GraphicSystem GraphicsNative = {
 	&Lux_NATIVE_Init,
@@ -123,21 +124,14 @@ void Lux_NATIVE_SetFrame(LuxRect & rect, bool line)
  * @brief Lux_NATIVE_Init
  * @param width
  * @param height
- * @param bpp
- * @param actual_width
- * @param actual_height
  * @return
  */
-bool Lux_NATIVE_Init(LuxRect screen_dimension, LuxRect *display_dimension )
+bool Lux_NATIVE_Init(LuxRect * screen_dimension, LuxRect *display_dimension )
 {
-	if ( actual_width )
-		*actual_width = 400;
-
-	if ( actual_height )
-		*actual_height = 240;
 
 	dsgraphics_bitfont = new DisplayBitFont( );
-
+	render_targets[0] = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+	render_targets[1] = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
 	current_screen = GFX_TOP;
 	return true;
@@ -168,7 +162,7 @@ void Lux_NATIVE_Display2Screen( int32_t * x, int32_t * y )
  */
 void Lux_NATIVE_Background(LuxColour fillcolor)
 {
-	sf2d_set_clear_color( RGBA8(fillcolor.r, fillcolor.g, fillcolor.b, fillcolor.a) );
+	clrClear = C2D_Color32(fillcolor.r, fillcolor.g, fillcolor.b, fillcolor.a);
 }
 
 /**
@@ -177,7 +171,7 @@ void Lux_NATIVE_Background(LuxColour fillcolor)
  */
 void Lux_NATIVE_BackgroundObject( MapObject background )
 {
-	sf2d_set_clear_color( RGBA8(background.effects.primary_colour.r, background.effects.primary_colour.g, background.effects.primary_colour.b, background.effects.primary_colour.a) );
+
 }
 /**
 * @brief Lux_NATIVE_PreShow
@@ -187,9 +181,12 @@ void Lux_NATIVE_PreShow( uint8_t screen )
 	if ( screen < 32 )
 	{
 		gfxScreen_t next_screen = IS_BIT_SET(native_screen_assignment, screen) ?  GFX_BOTTOM : GFX_TOP;
+		C3D_RenderTarget * screen_target  = next_screen == GFX_TOP ? render_targets[0] : render_targets[1];
 		if ( current_screen != next_screen )
 		{
-			sf2d_start_frame( next_screen, GFX_LEFT);
+			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+			C2D_TargetClear(screen_target, clrClear);
+			C2D_SceneBegin(screen_target);
 		}
 		current_screen = next_screen;
 	}
@@ -202,7 +199,7 @@ void Lux_NATIVE_PreShow( uint8_t screen )
  */
 void Lux_NATIVE_Update( uint8_t screen, LuxRect rect)
 {
-
+	C2D_Flush();
 }
 
 /**
@@ -212,15 +209,18 @@ void Lux_NATIVE_Show( uint8_t screen )
 {
 	if ( screen > 30 )
 	{
-		sf2d_swapbuffers();
+		C2D_Flush();
 	}
 	else
 	{
 
 		gfxScreen_t next_screen = IS_BIT_SET(native_screen_assignment, screen+1) ?  GFX_BOTTOM : GFX_TOP;
+		C3D_RenderTarget * screen_target  = next_screen == GFX_TOP ? render_targets[0] : render_targets[1];
 		if ( current_screen != next_screen )
 		{
-			sf2d_end_frame();
+			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+			C2D_TargetClear(screen_target, clrClear);
+			C2D_SceneBegin(screen_target);
 		}
 	}
 
@@ -253,8 +253,8 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 
 	draw.x = dest_rect.x;
 	draw.y = dest_rect.y;
-	draw.w = surface->w;
-	draw.h = surface->h;
+	draw.w = static_cast<uint16_t>(surface->w);
+	draw.h = static_cast<uint16_t>(surface->h);
 
 //	point.x = draw.w/2;
 //	point.y = draw.h/2;
@@ -273,8 +273,8 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 		repeat.y = dest_rect.w / surface->w;
 		repeat.x = dest_rect.h / surface->h;
 
-		repeat.w = surface->h;
-		repeat.h = surface->w;
+		repeat.w = static_cast<uint16_t>(surface->h);
+		repeat.h = static_cast<uint16_t>(surface->w);
 	}
 	else
 	{
@@ -329,8 +329,7 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 				draw.w = surface->w;
 				draw.h = surface->h;
 
-
-				sf2d_draw_texture_blend( surface->texture,draw.x, draw.y, RGBA8(effect.primary_colour.r, effect.primary_colour.g, effect.primary_colour.b, effect.primary_colour.a));
+				//sf2d_draw_texture_blend( surface->texture,draw.x, draw.y, RGBA8(effect.primary_colour.r, effect.primary_colour.g, effect.primary_colour.b, effect.primary_colour.a));
 
 			}
 		}
@@ -350,7 +349,7 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 		{
 			draw.y += surface->w;
 		}
-		sf2d_draw_texture_blend( surface->texture,draw.x, draw.y, RGBA8(effect.primary_colour.r, effect.primary_colour.g, effect.primary_colour.b, effect.primary_colour.a));
+		//sf2d_draw_texture_blend( surface->texture,draw.x, draw.y, RGBA8(effect.primary_colour.r, effect.primary_colour.g, effect.primary_colour.b, effect.primary_colour.a));
 	}
 
 }
@@ -358,19 +357,21 @@ void Lux_NATIVE_DrawSprite( LuxSprite * sprite, LuxRect dest_rect, ObjectEffect 
 void Lux_NATIVE_DrawRect( LuxRect dest_rect, ObjectEffect effects)
 {
 	Lux_NATIVE_SetFrame(dest_rect, false);
-	sf2d_draw_rectangle(dest_rect.x, dest_rect.y, dest_rect.w, dest_rect.h, RGBA8(effects.primary_colour.r, effects.primary_colour.g, effects.primary_colour.b, effects.primary_colour.a)  );
+	uint32_t c = C2D_Color32(effects.primary_colour.r, effects.primary_colour.g, effects.primary_colour.b, effects.primary_colour.a);
+	C2D_DrawRectSolid(dest_rect.x, dest_rect.y, 0, dest_rect.w, dest_rect.h, c );
 
 }
 
 void Lux_NATIVE_DrawLine( LuxRect points, ObjectEffect effects )
 {
 	Lux_NATIVE_SetFrame(points, true);
-	sf2d_draw_line(points.x, points.y, points.w, points.h, RGBA8(effects.primary_colour.r, effects.primary_colour.g, effects.primary_colour.b, effects.primary_colour.a) );
+	uint32_t c = C2D_Color32(effects.primary_colour.r, effects.primary_colour.g, effects.primary_colour.b, effects.primary_colour.a);
+	C2D_DrawLine(points.x, points.y, c, points.w, points.h, c, 1.0, 1.0);
 }
 
 int32_t Lux_NATIVE_DrawChar( int32_t cchar, int32_t x, int32_t y, ObjectEffect effects, bool allow_custom )
 {
-	sf2d_texture * 	texture = NULL;
+	C3D_Tex * texture = NULL;
 	LuxColour c = effects.primary_colour;
 	LuxRect area;
 	NativeTexture * ntexture = NULL;
@@ -397,7 +398,7 @@ int32_t Lux_NATIVE_DrawChar( int32_t cchar, int32_t x, int32_t y, ObjectEffect e
 	{
 		ntexture = (NativeTexture*)sprite_data->GetData();
 
-		texture = ntexture->texture;
+		texture = &ntexture->texture;
 
 		area.w = ntexture->tw;
 		area.h = ntexture->th;
@@ -417,7 +418,7 @@ int32_t Lux_NATIVE_DrawChar( int32_t cchar, int32_t x, int32_t y, ObjectEffect e
 
 	if ( texture )
 	{
-		sf2d_draw_texture_blend(texture, area.x, area.y, RGBA8(effects.primary_colour.r, effects.primary_colour.g, effects.primary_colour.b, effects.primary_colour.a) 	);
+		//sf2d_draw_texture_blend(texture, area.x, area.y, RGBA8(effects.primary_colour.r, effects.primary_colour.g, effects.primary_colour.b, effects.primary_colour.a) 	);
 	}
 	return offset;
 }
@@ -618,15 +619,17 @@ void Lux_NATIVE_DrawMessage( std::string message, uint8_t alignment )
 		{
 			if ( !Lux_Util_CheckTextColour( cchar, font_color, watch_for_color ) )
 			{
-				sf2d_texture * texture = dsgraphics_bitfont->GetTexture(cchar);
+				C3D_Tex * texture = dsgraphics_bitfont->GetTexture(cchar);
 
 				if ( texture )
 				{
-					sf2d_draw_texture_blend(texture, draw.x, draw.y, RGBA8(font_color.r, font_color.g, font_color.b, font_color.a) 	);
+
+					//sf2d_draw_texture_blend(texture, draw.x, draw.y, RGBA8(font_color.r, font_color.g, font_color.b, font_color.a) 	);
 				}
 				else
 				{
-					sf2d_draw_rectangle(draw.x, draw.y, draw.w, draw.h, RGBA8(font_color.r, font_color.g, font_color.b, font_color.a)  );
+
+					C2D_DrawRectSolid(draw.x, draw.y, 0, draw.w, draw.h, C2D_Color32(font_color.r, font_color.g, font_color.b, font_color.a)  );
 				}
 				draw.x += 7;
 			}
@@ -649,15 +652,15 @@ void Lux_NATIVE_DrawMessage( std::string message, uint8_t alignment )
  */
 bool Lux_NATIVE_FreeSprite ( LuxSprite * sprite )
 {
-	if ( sprite == NULL )
+	if ( sprite == nullptr )
 		return false;
 	if ( sprite->data )
 	{
-		NativeTexture * texture = (NativeTexture*)sprite->data;
-		sf2d_free_texture(texture->texture);
+		NativeTexture * texture = static_cast<NativeTexture*>(sprite->data);
+		C3D_TexDelete(&texture->texture);
 		delete texture;
 	}
-	sprite->data = NULL;
+	sprite->data = nullptr;
 	return true;
 }
 
@@ -677,13 +680,10 @@ bool Lux_NATIVE_CreateSprite( LuxSprite * sprite, LuxRect rect, elix::Image * pn
 
 	NativeTexture * texture = new NativeTexture;
 
-	texture->texture = sf2d_create_texture( rect.w, rect.h, TEXFMT_RGBA8, SF2D_PLACE_RAM );
+	C3D_TexInit(&texture->texture, rect.w, rect.h, GPU_TEXCOLOR::GPU_RGBA8 );
 	texture->w = texture->tw = rect.w;
 	texture->h = texture->th = rect.h;
-	sprite->data = texture;
-
-	texture->tw = texture->texture->pow2_w;
-	texture->th = texture->texture->pow2_h;
+	sprite->data = (void*)texture;
 
 	uint32_t size = texture->tw*texture->th;
 	/* PNG image */
@@ -698,11 +698,9 @@ bool Lux_NATIVE_CreateSprite( LuxSprite * sprite, LuxRect rect, elix::Image * pn
 				pixels[q] = png->GetPixel(rect.x + x, rect.y + y);
 			}
 		}
-		//sf2d_fill_texture_from_RGBA8(texture->texture, pixels, texture->tw, texture->th);
-		memcpy(texture->texture->data, pixels, size*4);
-		sf2d_texture_tile32(texture->texture);
+		C3D_TexUpload(&texture->texture, pixels);
 	}
-	delete pixels;
+	delete[] pixels;
 	/*  ^ PNG Image */
 
 	return true;

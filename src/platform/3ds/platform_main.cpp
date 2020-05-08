@@ -8,15 +8,21 @@ Permission is granted to anyone to use this software for any purpose, including 
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 ****************************/
+
 #include "engine.h"
 #include "portal/portal.h"
 #include "core.h"
 #include "config.h"
-
+#include "test/test_code.h"
 std::string project_file = "/mokoi/examples/Input/game.mokoi";
 
 extern "C" int main( int argc, char *argv[] )
 {
+	std::string base_executable = (argc ? argv[0] : "/luxengine" );
+	lux::engine = new LuxEngine( base_executable );
+	luxtest::run();
+	delete lux::engine;
+	/*
 	LuxPortal::use = false;
 	std::string base_executable = (argc ? argv[0] : "/mokoi/luxengine" );
 	lux::engine = new LuxEngine( base_executable );
@@ -50,7 +56,7 @@ extern "C" int main( int argc, char *argv[] )
 	}
 	LuxPortal::close();
 	delete lux::engine;
-	
+	*/
 
 	return 0;
 }

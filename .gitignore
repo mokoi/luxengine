@@ -234,3 +234,4 @@ pip-log.txt
 LuxEngine.cflags
 
 LuxEngine.cxxflags
+*.exe

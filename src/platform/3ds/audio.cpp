@@ -16,7 +16,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 AudioSystem::AudioSystem ( )
 {
-	lux::core->SystemMessage(SYSTEM_MESSAGE_LOG) << "Audio System" << std::endl;
+	lux::core->SystemStreamMessage(SYSTEM_MESSAGE_LOG) << "Audio System" << std::endl;
 
 }
 
