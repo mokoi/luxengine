@@ -37,5 +37,5 @@ ifeq ($(BUILDDEBUG), TRUE)
 endif
 
 
-installdeps:
-	apt-get install libsdl2-dev libsdl2-mixer-dev
+#installdeps:
+#	apt-get install libsdl2-dev libsdl2-mixer-dev

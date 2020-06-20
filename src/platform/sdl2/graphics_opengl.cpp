@@ -100,7 +100,43 @@ PFNGLFRAMEBUFFERTEXTURE2DEXTPROC glFramebufferTexture2DEXT;
 PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT;
 PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
 
+char * opengl_framebuffer_error( GLenum error) {
+	static char opengl_framebuffer_error_string[][64] = {
+		"GL_FRAMEBUFFER_COMPLETE_EXT",
+		"GL_FRAMEBUFFER_UNSUPPORTED_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT",
+		"GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT"
 
+	};
+
+	switch (error) {
+
+		case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+			return opengl_framebuffer_error_string[1];
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+			return opengl_framebuffer_error_string[2];
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+			return opengl_framebuffer_error_string[3];
+		case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+			return opengl_framebuffer_error_string[4];
+		case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+			return opengl_framebuffer_error_string[5];
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+			return opengl_framebuffer_error_string[6];
+		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+			return opengl_framebuffer_error_string[7];
+		case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
+			return opengl_framebuffer_error_string[8];
+
+
+	}
+	return opengl_framebuffer_error_string[0];
+}
 
 void opengl_graphic_create_fbotexture( Texture & fbo )
 {
@@ -115,7 +151,7 @@ void opengl_graphic_create_fbotexture( Texture & fbo )
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fbo.tw, fbo.th, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, fbo.tw, fbo.th, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	//glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo.pointer, 0);
 
@@ -262,7 +298,8 @@ bool Lux_OGL_Init(LuxRect *screen_dimension, LuxRect *display_dimension)
 		GLenum fbo_status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
 		if ( fbo_status != GL_FRAMEBUFFER_COMPLETE_EXT )
 		{
-			lux::core->SystemStreamMessage( SYSTEM_MESSAGE_LOG ) << "Framebuffer error " << fbo_status << std::endl;
+			lux::core->SystemStreamMessage( SYSTEM_MESSAGE_LOG ) << "Framebuffer error " << opengl_framebuffer_error(fbo_status) << std::endl;
+			return false;
 		}
 		else
 		{
